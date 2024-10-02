@@ -73,7 +73,7 @@ interface AlternativeSlugs {
     social: Social;
   }
   
-  interface Photos {
+  interface Photo {
     id: string;
     slug: string;
     alternative_slugs: AlternativeSlugs;

@@ -4,6 +4,7 @@ import LoadingIndicator from "@/components/loading/LoadingIndicator";
 import { Statistics } from "@/models/Statistics";
 import { useState, useEffect } from "react";
 import PopularPhotos from "./components/PopularPhotos";
+import { Checks } from "../utils/checks";
 
 const Profile = () => {
   const [stats, setStats] = useState<Statistics>();
@@ -35,7 +36,9 @@ const Profile = () => {
           </div>
           <div className="stat-title">Total Views</div>
           <div className="stat-value text-primary">
-            <LoadingIndicator value={stats?.views.total.toLocaleString()} />
+            <LoadingIndicator isLoading={Checks.isNil(stats)} >
+              {stats?.views.total.toLocaleString()}
+              </LoadingIndicator>
           </div>
           <div className="stat-desc">
             {stats?.views.historical.average}% per day

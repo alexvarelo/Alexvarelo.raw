@@ -43,7 +43,39 @@ const fetchUserPhotos = async (currentPage: number, resultsPerPage: number, orde
     return result.data;
 }
 
+const fetchUserProfile = async () => {
+    const result = await axios.get('https://api.unsplash.com/users/alexvarelo', {
+        headers: HEADERS
+    });
+    return result.data;
+}
+
+const fetchUserCollections = async () => {
+    const result = await axios.get('https://api.unsplash.com/users/alexvarelo/collections', {
+        headers: HEADERS
+    });
+    return result.data;
+}
+
+const fetchCollectionPhotos = async (collectionId: string) => {
+    const result = await axios.get(`https://api.unsplash.com/collections/${collectionId}/photos`, {
+        headers: HEADERS
+    });
+    return result.data;
+}
+
+const fetchCollection= async (collectionId: string) => {
+    const result = await axios.get(`https://api.unsplash.com/collections/${collectionId}`, {
+        headers: HEADERS
+    });
+    return result.data;
+}
+
 export const AvailableApis = {
     fetchStats,
-    fetchUserPhotos
+    fetchUserPhotos,
+    fetchUserProfile,
+    fetchUserCollections, 
+    fetchCollectionPhotos,
+    fetchCollection
 };    

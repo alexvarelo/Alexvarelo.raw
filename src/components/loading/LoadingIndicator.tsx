@@ -1,13 +1,13 @@
-import { FunctionComponent } from "react";
+import { Children, FunctionComponent, PropsWithChildren } from "react";
 
 interface LoadingIndicatorProps {
-    value: number | string | undefined; 
+    isLoading: boolean;
     loadingSize?: "xs" | "sm" | "md" | "lg";
 }
  
-const LoadingIndicator: FunctionComponent<LoadingIndicatorProps> = ({value, loadingSize}) => {
-    if (value){
-        return <span>{value}</span>;
+const LoadingIndicator: React.FC<PropsWithChildren<LoadingIndicatorProps>> = ({isLoading, loadingSize, children}) => {
+    if (!isLoading){
+        return <span>{children}</span>;
     }
     return <span className={`loading loading-dots loading-${loadingSize ?? "sm"}`}></span>
 }

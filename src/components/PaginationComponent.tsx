@@ -15,7 +15,8 @@ const PaginationComponent: FunctionComponent<PaginationComponentProps> = ({
     <div className="join">
       <button
         className="join-item btn"
-        onClick={() => updatePage(currentPage + 1)}
+        onClick={() => updatePage(currentPage - 1)}
+        disabled={currentPage === 1}
       >
         «
       </button>
@@ -23,7 +24,7 @@ const PaginationComponent: FunctionComponent<PaginationComponentProps> = ({
       <button
         className="join-item btn"
         disabled={nextPageDisabled}
-        onClick={() => updatePage(currentPage - 1)}
+        onClick={() => updatePage(currentPage + 1)}
       >
         »
       </button>
