@@ -19,7 +19,8 @@ const CollectionPage: React.FC<any> = ({ params }) => {
     AvailableApis.fetchCollection(params?.collectionId).then((x) =>
       setcollectionInfo(x)
     );
-  }, []);
+  }, [params?.collectionId]);
+
   return (
     <div>
       <h2 className="text-4xl font-bold mb-20 mt-10">{collectionInfo?.title}</h2>

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, FC } from "react";
 import { AvailableApis } from "../apis/apis";
 import Image from "next/image";
 import { Pager } from "@/models/Pagination";
@@ -7,7 +7,7 @@ import LoadingIndicator from "@/components/loading/LoadingIndicator";
 import PaginationComponent from "@/components/PaginationComponent";
 import { motion } from "framer-motion";
 
-export const Landing = () => {
+const Landing: FC = () => {
   const [photos, setPhotos] = useState<Photo[]>([]);
   const [loading, setIsLoading] = useState(false);
 
@@ -42,13 +42,13 @@ export const Landing = () => {
       <div className="flex items-center">
         <div className="flex-1">
           <p className="text-lg my-2">
-            My name is Alex, I'm a software engineer and one of my biggest
+            My name is Alex, I&apos;m a software engineer and one of my biggest
             passions is to travel. <br />
             One of the best things to travel for me is to carry my camera
             everywhere, so I can create custom memories, that afterwards I like
             to share.
             <br />
-            I've been doing journals, photo albums, and keeping posting images
+            I&apos;ve been doing journals, photo albums, and keeping posting images
             on my{" "}
             <a
               href="https://www.instagram.com/alexvarelo.raw/"
@@ -125,3 +125,5 @@ export const Landing = () => {
     </div>
   );
 };
+
+export default Landing;
