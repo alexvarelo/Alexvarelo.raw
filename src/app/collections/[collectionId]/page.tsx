@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { FunctionComponent, useEffect, useState } from "react";
 import Image from "next/image";
 import { Collection } from "@/models/Collections";
+import ImageGallery from "@/components/images/ImageGallery";
 
 const CollectionPage: React.FC<any> = ({ params }) => {
   const [collectionPhotos, setcollectionPhotos] = useState<Photo[]>([]);
@@ -25,11 +26,11 @@ const CollectionPage: React.FC<any> = ({ params }) => {
     <div>
       <h2 className="text-4xl font-bold mb-20 mt-10">{collectionInfo?.title}</h2>
       <p>{collectionInfo?.description}</p>
-      <motion.div
+      {/* <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 1.5 }}
-        className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-2"
+        className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-4"
       >
         {collectionPhotos.map((photo) => (
           <div key={photo.id} className="relative overflow-hidden group">
@@ -47,6 +48,14 @@ const CollectionPage: React.FC<any> = ({ params }) => {
             />
           </div>
         ))}
+      </motion.div> */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1 }}
+      >
+
+      <ImageGallery photos={collectionPhotos} />
       </motion.div>
     </div>
   );

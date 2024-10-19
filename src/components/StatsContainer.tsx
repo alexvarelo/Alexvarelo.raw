@@ -14,7 +14,7 @@ const StatsContainer: FunctionComponent<StatsContainerProps> = ({
   additionalItem,
 }) => {
   return (
-    <div className="stats shadow">
+    <div className="stats shadow" style={{overflow: "hidden"}}>
       <div className="stat">
         <div className="stat-title">{title}</div>
         <LoadingIndicator isLoading={Checks.isNil(stat)}>

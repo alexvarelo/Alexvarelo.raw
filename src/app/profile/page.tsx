@@ -15,9 +15,9 @@ const Profile = () => {
 
   return (
     <>
-      <h2 className="text-center text-2xl font-bold my-4">My stats</h2>
+      <h2 className="text-center text-3xl font-bold my-4">Alexvarelo stats</h2>
 
-      <div className="stats shadow flex flex-wrap justify-center">
+      <div className="stats stats-vertical lg:stats-horizontal flex flex-wrap justify-center shadow">
         <div className="stat flex-1 min-w-[250px] m-2">
           <div className="stat-figure text-primary">
             <svg
@@ -36,12 +36,12 @@ const Profile = () => {
           </div>
           <div className="stat-title">Total Views</div>
           <div className="stat-value text-primary">
-            <LoadingIndicator isLoading={Checks.isNil(stats)} >
+            <LoadingIndicator isLoading={Checks.isNil(stats)}>
               {stats?.views.total.toLocaleString()}
-              </LoadingIndicator>
+            </LoadingIndicator>
           </div>
           <div className="stat-desc">
-            {stats?.views.historical.average}% per day
+            {stats?.views.historical.average} average per day
           </div>
         </div>
 
@@ -83,7 +83,7 @@ const Profile = () => {
             </div>
           </div>
           {/*TODO: This is wrong, needs to be updated*/}
-          <div className="stat-value">{stats?.views.historical.quantity}</div>
+          <div className="stat-value">{stats?.views.total}</div>
           <div className="stat-title">Photos uploaded</div>
           <div className="stat-desc text-secondary">alexvarelo.raw</div>
         </div>

@@ -31,39 +31,28 @@ const Landing: FC = () => {
 
   return (
     <div className="p-10">
+      <div className="avatar">
+        <div className="ring-primary ring-offset-base-100 w-24 rounded-full">
+          <img src={profileImage} />
+        </div>
+      </div>
       <motion.h1
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
-        transition={{ duration: 1.5 }}
+        transition={{ duration: 1 }}
         className="text-3xl font-bold my-4"
       >
-        Nice to meet you! 👋
+        Hi! I'm <span className="bg-gradient-to-r from-blue-400 to-blue-600 bg-clip-text text-transparent">Alexvarelo.raw</span>, <br className="mb-10" /> But you
+        can call me Alex
       </motion.h1>
-      <div className="flex items-center">
-        <div className="flex-1">
-          <p className="text-lg my-2">
-            My name is Alex, I&apos;m a software engineer and one of my biggest
-            passions is to travel. <br />
-            One of the best things to travel for me is to carry my camera
-            everywhere, so I can create custom memories, that afterwards I like
-            to share.
-            <br />
-            I&apos;ve been doing journals, photo albums, and keeping posting images
-            on my{" "}
-            <a
-              href="https://www.instagram.com/alexvarelo.raw/"
-              className="instagramGradient"
-            >
-              Instagram
-            </a>{" "}
-            account
-          </p>
-        </div>
-        <div className="avatar ml-4">
-          <div className="ring-primary ring-offset-base-100 w-24 rounded-full ring ring-offset-2">
-            <img src={profileImage} />
-          </div>
-        </div>
+      <div className="">
+        <p className="my-2">
+          My name is Alex, I&apos;m a software engineer and one of my biggest
+          passions is to travel. <br />
+          One of the best things to travel for me is to carry my camera
+          everywhere, so I can create custom memories, that afterwards I like to
+          share.
+        </p>
       </div>
       <br />
       <h2 className="text-2xl font-semibold my-4">Photos summary</h2>
@@ -71,12 +60,12 @@ const Landing: FC = () => {
         <StatsContainer
           title={"Photos"}
           stat={totalCustomerPhotos}
-          additionalItem={`Total promoted photos: ${photos?.[0]?.user?.total_promoted_photos}`}
+          additionalItem={`Promoted photos: ${photos?.[0]?.user?.total_promoted_photos}`}
         />
         <StatsContainer
           title={"Collections"}
           stat={photos?.[0]?.user?.total_collections}
-          additionalItem={`Total promoted collections: ${photos?.[0]?.user?.total_promoted_illustrations}`}
+          additionalItem={`Promoted collections: ${photos?.[0]?.user?.total_promoted_illustrations}`}
         />
       </div>
       <br />
@@ -96,7 +85,7 @@ const Landing: FC = () => {
             <>
               <div
                 key={photo.id}
-                className="relative w-full h-96 aspect-w-1 aspect-h-1 overflow-hidden group"
+                className="relative w-full h-96 overflow-hidden group"
               >
                 <Image
                   src={photo.urls.regular}
@@ -108,6 +97,9 @@ const Landing: FC = () => {
                   placeholder={photo.blur_hash ? "blur" : "empty"}
                   className="transition-transform duration-300 group-hover:scale-105"
                 />
+                {/* <div className="absolute bottom-0 right-0 bg-opacity-50 text-white p-2 group-hover:opacity-100 transition-opacity duration-300">
+                  <p className="text-xs">{photo.}</p>
+                </div> */}
               </div>
             </>
           ))}

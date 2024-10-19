@@ -16,8 +16,8 @@ const fetchStats = async (): Promise<Statistics> => {
     return convertToStatistics(result.data);
 }
 
-const fetchUserPhotos = async (currentPage: number, resultsPerPage: number, orderBy?: orderByQuery): Promise<any> => {
-    const result = await axios.get(`https://api.unsplash.com/users/alexvarelo/photos?page=${currentPage}&per_page=${resultsPerPage}&orderBy=${orderBy ?? "latest"}`, {
+const fetchUserPhotos = async (currentPage: number, resultsPerPage: number, orderBy?: orderByQuery, orientation?: "lanscape" | "portrait" | "squarish"): Promise<any> => {
+    const result = await axios.get(`https://api.unsplash.com/users/alexvarelo/photos?page=${currentPage}&per_page=${resultsPerPage}&orderBy=${orderBy ?? "latest"}${orientation ? `&orientation=${orientation}` : ""}`, {
         headers: HEADERS
     });
     return result.data;
