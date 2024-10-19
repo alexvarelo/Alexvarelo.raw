@@ -42,7 +42,7 @@ const NavbarHeader = () => {
         </div>
       </div>
       <div className="navbar-center">
-        <a className="btn btn-ghost text-2xl">🌻 alexvarelo</a>
+        <a className="btn btn-ghost text-2xl">🌻</a>
       </div>
       <div className="navbar-end">
         <button className="btn btn-ghost btn-circle">
