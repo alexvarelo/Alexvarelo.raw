@@ -42,7 +42,7 @@ const Landing: FC = () => {
         transition={{ duration: 1 }}
         className="text-3xl font-bold my-4"
       >
-        Hi! I'm <span className="bg-gradient-to-r from-blue-400 to-blue-600 bg-clip-text text-transparent">Alexvarelo.raw</span>, <br className="mb-10" /> But you
+        Hi! I&apos;m <span className="bg-gradient-to-r from-blue-400 to-blue-600 bg-clip-text text-transparent">Alexvarelo.raw</span>, <br className="mb-10" /> But you
         can call me Alex
       </motion.h1>
       <div className="">
