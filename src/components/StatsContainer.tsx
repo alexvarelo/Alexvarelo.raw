@@ -1,6 +1,7 @@
 import { FunctionComponent } from "react";
 import LoadingIndicator from "./loading/LoadingIndicator";
 import { Checks } from "@/app/utils/checks";
+import { NumberTicker } from "./shared/NumberTicker";
 
 interface StatsContainerProps {
   title: string;
@@ -14,11 +15,13 @@ const StatsContainer: FunctionComponent<StatsContainerProps> = ({
   additionalItem,
 }) => {
   return (
-    <div className="stats shadow" style={{overflow: "hidden"}}>
+    <div className="stats shadow" style={{ overflow: "hidden" }}>
       <div className="stat">
         <div className="stat-title">{title}</div>
         <LoadingIndicator isLoading={Checks.isNil(stat)}>
-          <div className="stat-value">{stat}</div>
+          <div className="stat-value">
+            <NumberTicker value={stat} direction="up" />
+          </div>
         </LoadingIndicator>
         <div className="stat-desc">{additionalItem}</div>
       </div>

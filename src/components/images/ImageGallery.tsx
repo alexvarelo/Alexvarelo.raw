@@ -4,7 +4,7 @@ const ImageGallery: React.FC<{ photos: Photo[] }> = ({ photos }) => {
   const breakPoints = {
     default: 3,
     1100: 2,
-    700: 1,
+    700: 2,
   };
 
   return (

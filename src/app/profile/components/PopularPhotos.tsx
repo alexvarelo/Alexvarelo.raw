@@ -11,7 +11,7 @@ const PopularPhotos: FunctionComponent<PopularPhotosProps> = () => {
     AvailableApis.fetchUserPhotos(1, 10, "popular", "portrait").then(setPhotos);
   }, []);
   return (
-    <div className="carousel rounded-box">
+    <div className="carousel rounded-box mt-5">
       {photos.map((photo) => (
         <div className="carousel-item" key={photo?.id}>
           <Image

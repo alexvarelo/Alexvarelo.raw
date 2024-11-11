@@ -5,6 +5,9 @@ import { Statistics } from "@/models/Statistics";
 import { useState, useEffect } from "react";
 import PopularPhotos from "./components/PopularPhotos";
 import { Checks } from "../utils/checks";
+import { NumberTicker } from "@/components/shared/NumberTicker";
+import Globe from "@/components/ui/globe";
+import { motion } from "framer-motion";
 
 const Profile = () => {
   const [stats, setStats] = useState<Statistics>();
@@ -15,11 +18,11 @@ const Profile = () => {
 
   return (
     <>
-      <h2 className="text-center text-3xl font-bold my-4">Alexvarelo stats</h2>
+      <h2 className="text-3xl font-bold my-4 ml-2">My statistics  🎊</h2>
 
       <div className="stats stats-vertical lg:stats-horizontal flex flex-wrap justify-center shadow">
         <div className="stat flex-1 min-w-[250px] m-2">
-          <div className="stat-figure text-primary">
+          <div className="stat-figure">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -36,9 +39,11 @@ const Profile = () => {
           </div>
           <div className="stat-title">Total Views</div>
           <div className="stat-value text-primary">
-            <LoadingIndicator isLoading={Checks.isNil(stats)}>
-              {stats?.views.total.toLocaleString()}
-            </LoadingIndicator>
+            <div className="stat-value text-red-400">
+              <LoadingIndicator isLoading={Checks.isNil(stats)}>
+                <NumberTicker value={stats?.views.total as number} />
+              </LoadingIndicator>
+            </div>
           </div>
           <div className="stat-desc">
             {stats?.views.historical.average} average per day
@@ -46,7 +51,7 @@ const Profile = () => {
         </div>
 
         <div className="stat flex-1 min-w-[250px] m-2">
-          <div className="stat-figure text-secondary">
+          <div className="stat-figure">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
@@ -63,7 +68,9 @@ const Profile = () => {
           </div>
           <div className="stat-title">Total downloads</div>
           <div className="stat-value text-blue-600">
-            {stats?.downloads.total.toLocaleString()}
+            <LoadingIndicator isLoading={Checks.isNil(stats)}>
+              <NumberTicker value={stats?.downloads.total as number} />
+            </LoadingIndicator>
           </div>
           <div className="stat-desc">
             {stats?.downloads.historical.average.toLocaleString()} average per
@@ -75,17 +82,14 @@ const Profile = () => {
           <div className="stat-figure text-secondary">
             <div className="avatar">
               <div className="w-16 rounded-full">
-                <img
-                  src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
-                  className="w-full h-auto"
-                />
+                <img src={"/ProfileAvatar.png"} className="w-full h-auto" />
               </div>
             </div>
           </div>
           {/*TODO: This is wrong, needs to be updated*/}
-          <div className="stat-value">{stats?.views.total}</div>
           <div className="stat-title">Photos uploaded</div>
-          <div className="stat-desc text-secondary">alexvarelo.raw</div>
+          <div className="stat-value">{stats?.views.historical.quantity}</div>
+          <div className="stat-desc">alexvarelo.raw</div>
         </div>
       </div>
       <br />

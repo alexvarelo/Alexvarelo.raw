@@ -13,14 +13,14 @@ export const ThemeContext = createContext<ThemeContextType>({
 });
 
 export const ThemeProvider = ({ children }: any) => {
-  const [theme, setTheme] = useState<"light" | "dark">("light");
+  const [theme, setTheme] = useState<"light" | "business">("light");
 
   useEffect(() => {
     window.localStorage.setItem("theme", theme);
   }, [theme]);
 
   const changeTheme = () => {
-    setTheme((prev) => (prev === "light" ? "dark" : "light"));
+    setTheme((prev) => (prev === "light" ? "business" : "light"));
   };
   return (
     <ThemeContext.Provider value={{ theme, changeTheme }}>
