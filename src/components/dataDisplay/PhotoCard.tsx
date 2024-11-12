@@ -24,7 +24,7 @@ const PhotoCard: FunctionComponent<PhotoCardProps> = ({imgSrc, title, content, c
         <h2 className="card-title">{title}</h2>
         <p>{content}</p>
         <div className="card-actions justify-end">
-          <Link className="btn btn-primary" href={`/collections/${collectionId}`}>Check it out!</Link>
+          <Link className="text-2xl" href={`/collections/${collectionId}`}>👀</Link>
         </div>
       </div>
     </div>

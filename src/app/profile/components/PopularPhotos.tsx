@@ -14,12 +14,10 @@ const PopularPhotos: FunctionComponent<PopularPhotosProps> = () => {
     <div className="carousel rounded-box mt-5">
       {photos.map((photo) => (
         <div className="carousel-item" key={photo?.id}>
-          <Image
+          <img
             src={photo?.urls.regular}
             alt={photo?.description}
-            objectFit="cover"
-            width={300}
-            height={300}
+            className="w-[300px] h-[400px] object-cover rounded"
           />
         </div>
       ))}

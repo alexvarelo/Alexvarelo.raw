@@ -6,8 +6,6 @@ import { useState, useEffect } from "react";
 import PopularPhotos from "./components/PopularPhotos";
 import { Checks } from "../utils/checks";
 import { NumberTicker } from "@/components/shared/NumberTicker";
-import Globe from "@/components/ui/globe";
-import { motion } from "framer-motion";
 
 const Profile = () => {
   const [stats, setStats] = useState<Statistics>();

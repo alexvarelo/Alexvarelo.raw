@@ -11,11 +11,12 @@ const Collections = () => {
   }, []);
   return (
     <div className="container mx-auto p-2">
-      <h2 className="text-3xl font-bold mb-10">Welcome to my collections!</h2>
-      <p className="mb-10">
-        These are my personal collections, where I group my photos by the feeling, experience, or topic.
+      <h2 className="text-2xl font-bold mb-10">Welcome to my collections!</h2>
+      <p className="mb-10 text-sm">
+        These are my personal collections, where I group my photos by the
+        feeling, experience, or topic.
       </p>
-      <div className="mb-20 flex gap-x-2 justify-center">
+      <div className="mb-10 flex flex-wrap gap-x-2 justify-center gap-3">
         <div className="badge p-4 bg-green-200">Mountains</div>
         <div className="badge bg-cyan-200 p-4">Ocean</div>
         <div className="badge bg-orange-200 p-4">Lifestyle</div>

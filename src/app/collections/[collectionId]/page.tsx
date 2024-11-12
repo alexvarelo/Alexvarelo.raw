@@ -24,31 +24,9 @@ const CollectionPage: React.FC<any> = ({ params }) => {
 
   return (
     <div>
-      <h2 className="text-4xl font-bold mb-20 mt-10">{collectionInfo?.title}</h2>
+      <h2 className="text-2xl font-bold mb-14 mt-5">{collectionInfo?.title}</h2>
       <p>{collectionInfo?.description}</p>
-      {/* <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 1.5 }}
-        className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-3 gap-4"
-      >
-        {collectionPhotos.map((photo) => (
-          <div key={photo.id} className="relative overflow-hidden group">
-            <Image
-              src={photo.urls.regular}
-              alt={photo.alt_description}
-              blurDataURL={photo.blur_hash}
-              layout="responsive"
-              objectFit="cover"
-              loading="lazy"
-              placeholder={photo.blur_hash ? "blur" : "empty"}
-              width={800}
-              height={800}
-              className="transition-transform duration-300 group-hover:scale-105"
-            />
-          </div>
-        ))}
-      </motion.div> */}
+      
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
