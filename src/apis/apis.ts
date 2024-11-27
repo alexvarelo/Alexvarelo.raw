@@ -51,11 +51,38 @@ const fetchCollection= async (collectionId: string) => {
     return result.data;
 }
 
+const getPhotoDetails = async (photoId: string) => {
+    const result = await axios.get(`https://api.unsplash.com/photos/${photoId}`,{
+        headers: HEADERS
+    });
+    return result.data;
+
+}
+
+const downloadPhoto = async (photoId: string) => {
+    const result = await axios.get(`https://api.unsplash.com/photos/${photoId}/download`,{
+        headers: HEADERS
+    });
+    return result.data;
+
+}
+
+
+const photoStatistics = async (photoId: string) => {
+    const result = await axios.get(`https://api.unsplash.com/photos/${photoId}/statistics`,{
+        headers: HEADERS
+    });
+    return result.data;
+}
+
 export const AvailableApis = {
     fetchStats,
     fetchUserPhotos,
     fetchUserProfile,
     fetchUserCollections, 
     fetchCollectionPhotos,
-    fetchCollection
+    fetchCollection,
+    downloadPhoto,
+    getPhotoDetails,
+    photoStatistics
 };    

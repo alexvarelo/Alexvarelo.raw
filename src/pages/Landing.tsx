@@ -1,11 +1,27 @@
 import { useState, useEffect, FC } from "react";
 import { AvailableApis } from "../apis/apis";
-import Image from "next/image";
 import { Pager } from "@/models/Pagination";
 import StatsContainer from "@/components/StatsContainer";
 import LoadingIndicator from "@/components/loading/LoadingIndicator";
 import PaginationComponent from "@/components/PaginationComponent";
 import { motion } from "framer-motion";
+import ImageLayout from "@/components/images/ImageLayout";
+
+function debounce<T extends (...args: any[]) => void>(
+  func: T,
+  delay: number
+): (...args: Parameters<T>) => void {
+  let timeoutId: ReturnType<typeof setTimeout> | undefined;
+
+  return function (...args: Parameters<T>) {
+    if (timeoutId) {
+      clearTimeout(timeoutId);
+    }
+    timeoutId = setTimeout(() => {
+      func(...args);
+    }, delay);
+  };
+}
 
 const Landing: FC = () => {
   const [photos, setPhotos] = useState<Photo[]>([]);
@@ -15,6 +31,7 @@ const Landing: FC = () => {
     page: 1,
     resultsPerPage: 12,
   });
+
   useEffect(() => {
     setIsLoading(true);
     AvailableApis.fetchUserPhotos(
@@ -25,6 +42,7 @@ const Landing: FC = () => {
       setIsLoading(false);
     });
   }, [pagination]);
+
 
   const totalCustomerPhotos = photos?.[0]?.user?.total_photos;
   const profileImage = photos?.[0]?.user?.profile_image?.large;
@@ -102,24 +120,7 @@ const Landing: FC = () => {
         >
           {photos.map((photo) => (
             <>
-              <div
-                key={photo.id}
-                className="relative w-full h-96 overflow-hidden group"
-              >
-                <Image
-                  src={photo.urls.regular}
-                  alt={photo.alt_description}
-                  blurDataURL={photo.blur_hash}
-                  layout="fill"
-                  objectFit="cover"
-                  loading="lazy"
-                  placeholder={photo.blur_hash ? "blur" : "empty"}
-                  className="transition-transform duration-300 group-hover:scale-105"
-                />
-                {/* <div className="absolute bottom-0 right-0 bg-opacity-50 text-white p-2 group-hover:opacity-100 transition-opacity duration-300">
-                  <p className="text-xs">{photo.}</p>
-                </div> */}
-              </div>
+              <ImageLayout photo={photo} />
             </>
           ))}
         </motion.div>
@@ -130,7 +131,9 @@ const Landing: FC = () => {
           nextPageDisabled={
             totalCustomerPhotos / pagination.resultsPerPage < pagination.page
           }
-          updatePage={(page) => setPagination({ ...pagination, page })}
+          updatePage={(page) =>
+            debounce(() => setPagination({ ...pagination, page }), 100)
+          }
         />
       </div>
     </div>

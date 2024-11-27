@@ -1,10 +1,16 @@
+import { useRouter } from "next/navigation";
 import Masonry from "react-masonry-css";
 
 const ImageGallery: React.FC<{ photos: Photo[] }> = ({ photos }) => {
+  const router = useRouter();
   const breakPoints = {
     default: 3,
     1100: 2,
     700: 2,
+  };
+
+  const handleImageClick = (photoId: string) => {
+    router.push(`/image/${photoId}`); // Adjust route if needed
   };
 
   return (
@@ -15,7 +21,7 @@ const ImageGallery: React.FC<{ photos: Photo[] }> = ({ photos }) => {
         columnClassName="my-masonry-grid_column"
       >
         {photos.map((image) => (
-          <div key={image.id}>
+          <div key={image.id} onClick={() => handleImageClick(image.id)}>
             <img
               className="images"
               src={image.urls.regular}
@@ -27,6 +33,5 @@ const ImageGallery: React.FC<{ photos: Photo[] }> = ({ photos }) => {
     </div>
   );
 };
-
 
 export default ImageGallery;
