@@ -59,7 +59,7 @@ const ImageDetail: React.FC<any> = ({ params }) => {
               />
               <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/20 to-transparent">
                 <BlurIn>
-                  <div className="absolute inset-0 flex items-start justify-start pl-4 pb-4">
+                  <div className="absolute inset-0 flex items-start justify-start pl-6 pt-4">
                     <h2 className="text-lg md:text-2xl lg:text-4xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-white via-gray-300 to-gray-500 opacity-100">
                       {photo?.description}
                     </h2>
