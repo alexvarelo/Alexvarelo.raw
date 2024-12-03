@@ -1,17 +1,28 @@
-"use client"
+"use client";
 import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
 import { AvailableApis } from "@/apis/apis";
 import { ImageStats } from "@/models/Statistics";
 import Image from "next/image";
 import BlurIn from "@/components/ui/BlurIn";
-import { FaApple, FaCamera, FaClock, FaRuler, FaSun } from "react-icons/fa";
-import { BsTag } from "react-icons/bs";
+import {
+  FaApple,
+  FaArrowLeft,
+  FaCamera,
+  FaClock,
+  FaRuler,
+  FaSun,
+} from "react-icons/fa";
+import { RiNumbersLine } from "react-icons/ri";
+import { BsDownload, BsEye, BsTag } from "react-icons/bs";
 import { PhotoDetails } from "@/models/PhotoDetails";
+import { useRouter } from "next/navigation";
+import { NumberTicker } from "@/components/shared/NumberTicker";
 
 const ImageDetail: React.FC<any> = ({ params }) => {
   const [photo, setPhoto] = useState<PhotoDetails | null>(null);
   const [photoStats, setphotoStats] = useState<ImageStats | null>(null);
+  const router = useRouter();
 
   useEffect(() => {
     const fetchImageData = async () => {
@@ -35,20 +46,17 @@ const ImageDetail: React.FC<any> = ({ params }) => {
   if (!photo) return <div>Loading...</div>;
 
   return (
-
-
-
-
-
-    
     <div className="p-4 md:p-6">
+      <button onClick={() => router.back()} className="mb-4 px-4 py-2rounded">
+        <FaArrowLeft />
+      </button>
       <motion.div
         initial={{ opacity: 0, y: 50 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 2 }}
       >
         <div className="flex justify-center items-center p-4 md:p-6">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 w-full h-[800px] md:h-[600px] bg-white shadow-lg rounded-lg overflow-hidden">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 w-full h-[800px] md:h-[600px] shadow-lg rounded-lg overflow-hidden">
             <div className="relative col-span-4 md:col-span-2">
               <Image
                 src={photo?.urls.regular}
@@ -109,9 +117,30 @@ const ImageDetail: React.FC<any> = ({ params }) => {
                 </li>
 
                 <li className="text-xs md:text-sm text-gray-500 mt-2 md:mt-4">
-                  {new Date(photo.created_at).toDateString()}
+                  {new Date(photo.created_at).toLocaleDateString()}
                 </li>
               </ul>
+
+              {photoStats && (
+                <div className="mt-10 text-sm">
+                  <li className="flex items-center space-x-2 mb-3">
+                    <RiNumbersLine className="text-gray-500" />
+                    <span>Statistics</span>
+                  </li>
+                  <li className="flex items-center space-x-2 mb-1">
+                    <BsEye className="text-gray-500" />
+                    <span>
+                      <NumberTicker value={photoStats.views.total} />
+                    </span>
+                  </li>
+                  <li className="flex items-center space-x-2">
+                    <BsDownload className="text-gray-500" />
+                    <span>
+                      <NumberTicker value={photoStats?.downloads?.total ?? 0} />
+                    </span>
+                  </li>
+                </div>
+              )}
             </div>
           </div>
         </div>

@@ -3,7 +3,6 @@
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import ThemeIndicator from "./ThemeIndicator";
-import { motion } from "framer-motion";
 
 const NavbarHeader = () => {
   const [showAvatar, setShowAvatar] = useState(false);
@@ -21,7 +20,7 @@ const NavbarHeader = () => {
   }, []);
 
   return (
-    <div className="navbar bg-base-100 py-4 pr-5">
+    <div className="navbar bg-base-100 py-4 pr-7">
       <div className="navbar-start">
         <div className="dropdown">
           <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">

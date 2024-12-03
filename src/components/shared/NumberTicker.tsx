@@ -43,9 +43,13 @@ export function NumberTicker({
     [springValue, decimalPlaces, value]
   );
 
+  if (!value){
+    return <span>0</span>
+  }
+
   return (
     <span
-      className="inline-block tabular-nums tracking-wider"
+      className="inline-block"
       ref={ref}
     />
   );
