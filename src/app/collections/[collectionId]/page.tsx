@@ -4,20 +4,8 @@ import { motion } from "framer-motion";
 import { useEffect, useState } from "react";
 import { Collection } from "@/models/Collections";
 import ImageGallery from "@/components/images/ImageGallery";
+import { Badge } from "@/components/shared/Badge";
 
-interface BadgeProps {
-  text: string;
-}
-
-const Badge: React.FC<BadgeProps> = ({ text }) => {
-
-  const capitalizedText = text.charAt(0).toUpperCase() + text.slice(1);
-  return (
-    <span className="inline-block bg-gray-100 text-gray-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded-full">
-      {capitalizedText}
-    </span>
-  );
-};
 
 const CollectionPage: React.FC<any> = ({ params }) => {
   const [collectionPhotos, setcollectionPhotos] = useState<Photo[]>([]);
@@ -40,7 +28,7 @@ const CollectionPage: React.FC<any> = ({ params }) => {
 
   return (
     <div>
-      <h2 className="text-3xl font-bold mt-5 mb-2">{collectionInfo?.title}</h2>
+      <h2 className="text-3xl font-bold mb-2">{collectionInfo?.title}</h2>
       <div className="text-xs text-gray-500">
         <p>{collectionInfo?.description}</p>
         <p>{collectionInfo?.total_photos} images</p>

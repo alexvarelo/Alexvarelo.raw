@@ -1,4 +1,5 @@
 "use client";
+import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
 import { useState, useEffect } from "react";
 import { AvailableApis } from "@/apis/apis";
@@ -16,7 +17,6 @@ import {
 import { RiNumbersLine } from "react-icons/ri";
 import { BsDownload, BsEye, BsTag } from "react-icons/bs";
 import { PhotoDetails } from "@/models/PhotoDetails";
-import { useRouter } from "next/navigation";
 import { NumberTicker } from "@/components/shared/NumberTicker";
 
 const ImageDetail: React.FC<any> = ({ params }) => {
@@ -45,9 +45,11 @@ const ImageDetail: React.FC<any> = ({ params }) => {
 
   if (!photo) return <div>Loading...</div>;
 
+  const highlightClass = "text-gold font-bold";
+
   return (
     <div className="p-4 md:p-6">
-      <button onClick={() => router.back()} className="mb-4 px-4 py-2rounded">
+      <button onClick={() => router.back()} className="mb-4 px-4 py-2 rounded">
         <FaArrowLeft />
       </button>
       <motion.div
@@ -130,13 +132,25 @@ const ImageDetail: React.FC<any> = ({ params }) => {
                   <li className="flex items-center space-x-2 mb-1">
                     <BsEye className="text-gray-500" />
                     <span>
-                      <NumberTicker value={photoStats.views.total} />
+                      <NumberTicker
+                        value={photoStats.views.total}
+                        cssWrapper={
+                          photoStats.views.total > 100000 ? highlightClass : ""
+                        }
+                      />
                     </span>
                   </li>
                   <li className="flex items-center space-x-2">
                     <BsDownload className="text-gray-500" />
                     <span>
-                      <NumberTicker value={photoStats?.downloads?.total ?? 0} />
+                      <NumberTicker
+                        value={photoStats?.downloads?.total ?? 0}
+                        cssWrapper={
+                          photoStats.downloads.total > 10000
+                            ? highlightClass
+                            : ""
+                        }
+                      />
                     </span>
                   </li>
                 </div>

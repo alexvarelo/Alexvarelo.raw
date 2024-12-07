@@ -4,7 +4,7 @@ import Masonry from "react-masonry-css";
 const ImageGallery: React.FC<{ photos: Photo[] }> = ({ photos }) => {
   const router = useRouter();
   const breakPoints = {
-    default: 3,
+    default: 4,
     1100: 2,
     700: 2,
   };
@@ -23,6 +23,7 @@ const ImageGallery: React.FC<{ photos: Photo[] }> = ({ photos }) => {
         {photos.map((image) => (
           <div key={image.id} onClick={() => handleImageClick(image.id)}>
             <img
+              style={{ cursor: "pointer" }}
               className="images"
               src={image.urls.regular}
               alt={image.description}

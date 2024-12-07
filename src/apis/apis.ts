@@ -75,6 +75,13 @@ const photoStatistics = async (photoId: string) => {
     return result.data;
 }
 
+const searchPhoto = async (query: string) => {
+    const result = await axios.get(`https://api.unsplash.com/search/photos?query=${query}`,{
+        headers: HEADERS
+    });
+    return result.data;
+}
+
 export const AvailableApis = {
     fetchStats,
     fetchUserPhotos,
@@ -84,5 +91,6 @@ export const AvailableApis = {
     fetchCollection,
     downloadPhoto,
     getPhotoDetails,
-    photoStatistics
+    photoStatistics,
+    searchPhoto
 };    

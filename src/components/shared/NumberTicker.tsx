@@ -2,18 +2,21 @@
 
 import { useEffect, useRef } from "react";
 import { useInView, useMotionValue, useSpring } from "framer-motion";
+import { cn } from "@/lib/utils";
 
 export function NumberTicker({
   value,
   direction = "up",
   delay = 0,
   decimalPlaces = 0,
+  cssWrapper
 }: {
   value: number;
   direction?: "up" | "down";
   className?: string;
   delay?: number; // delay in s
   decimalPlaces?: number;
+  cssWrapper?: string;
 }) {
   const ref = useRef<HTMLSpanElement>(null);
   const motionValue = useMotionValue(direction === "down" ? value : 0);
@@ -49,7 +52,7 @@ export function NumberTicker({
 
   return (
     <span
-      className="inline-block"
+      className={cn("inline-block", cssWrapper)}
       ref={ref}
     />
   );
