@@ -19,13 +19,13 @@
     width: auto;
   }
   .my-masonry-grid_column {
-    padding-left: 10px; /* gutter size */
+    padding-left: 6px; /* gutter size */
     background-clip: padding-box;
   }
   
   /* Style your items */
   .my-masonry-grid_column > div {/*changedivtoreferenceyourelementsyouputin<Masonry>*/
-    margin-bottom: 10px;
+    margin-bottom: 6px;
 }
   @layer base {
   :root {

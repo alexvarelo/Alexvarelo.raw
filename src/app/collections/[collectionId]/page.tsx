@@ -5,15 +5,16 @@ import { useEffect, useState } from "react";
 import { Collection } from "@/models/Collections";
 import ImageGallery from "@/components/images/ImageGallery";
 import { Badge } from "@/components/shared/Badge";
+import { Pager } from "@/models/Pagination";
 
 
 const CollectionPage: React.FC<any> = ({ params }) => {
   const [collectionPhotos, setcollectionPhotos] = useState<Photo[]>([]);
-
+  const [pager, setPager] = useState<Pager>({page:1, resultsPerPage:10});
   const [collectionInfo, setcollectionInfo] = useState<Collection>();
 
   useEffect(() => {
-    AvailableApis.fetchCollectionPhotos(params?.collectionId).then((x) =>
+    AvailableApis.fetchCollectionPhotos(params?.collectionId, pager).then((x) =>
       setcollectionPhotos(x)
     );
 

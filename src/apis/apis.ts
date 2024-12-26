@@ -1,6 +1,7 @@
 import { Statistics } from "@/models/Statistics";
 import axios from "axios";
 import { convertToStatistics } from "./helpers/DataMapping";
+import { Pager } from "@/models/Pagination";
 
 const HEADERS = {
     Authorization: `Client-ID ${process.env.NEXT_PUBLIC_UNSPLASH_AUTH_KEY}`
@@ -37,8 +38,8 @@ const fetchUserCollections = async () => {
     return result.data;
 }
 
-const fetchCollectionPhotos = async (collectionId: string) => {
-    const result = await axios.get(`https://api.unsplash.com/collections/${collectionId}/photos`, {
+const fetchCollectionPhotos = async (collectionId: string, page: Pager) => {
+    const result = await axios.get(`https://api.unsplash.com/collections/${collectionId}/photos?page=${page.page}&per_page=${page.resultsPerPage}`, {
         headers: HEADERS
     });
     return result.data;

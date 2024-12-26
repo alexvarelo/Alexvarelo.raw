@@ -80,7 +80,7 @@ const Landing: FC = () => {
           📍
           I&apos;m based on Spain, and my hometown is one of the best places in
           earth 🌍 :{" "}
-          <span className="bg-gradient-to-r from-green-600 to-blue-300 bg-clip-text text-transparent font-bold">
+          <span className="bg-gradient-to-r from-green-600 to-blue-300 bg-clip-text text-transparent font-extrabold text-xl">
             Galicia
           </span>
           <br />

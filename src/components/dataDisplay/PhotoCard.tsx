@@ -12,7 +12,7 @@ interface PhotoCardProps {
 const PhotoCard: FunctionComponent<PhotoCardProps> = ({imgSrc, title, content, collectionId}) => {
   return (
     <div className="card lg:card-side bg-base-100 shadow-xl">
-      <figure className="relative w-full sm:w-1/2 md:w-1/2 lg:w-1/2 xl:w-1/2 h-52">
+      <figure className="relative w-full sm:w-1/2 md:w-1/2 lg:w-1/2 xl:w-1/2 h-40 lg:h-52">
         <Image
           src={imgSrc}
           alt="Album"
