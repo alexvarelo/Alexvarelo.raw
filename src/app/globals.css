@@ -15,17 +15,17 @@
 }
 .my-masonry-grid {
     display: flex;
-    margin-left: -10px; /* gutter size offset */
+    margin-left: -20px; /* gutter size offset */
     width: auto;
   }
   .my-masonry-grid_column {
-    padding-left: 6px; /* gutter size */
+    padding-left: 20px; /* gutter size */
     background-clip: padding-box;
   }
   
   /* Style your items */
   .my-masonry-grid_column > div {/*changedivtoreferenceyourelementsyouputin<Masonry>*/
-    margin-bottom: 6px;
+    margin-bottom: 20px;
 }
   @layer base {
   :root {

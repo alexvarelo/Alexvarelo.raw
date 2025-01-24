@@ -74,18 +74,16 @@ const Landing: FC = () => {
         transition={{ duration: 1.3 }}
       >
         <p className="my-4 max-w-4xl">
-          👋 I&apos;m a software engineer and one of my biggest passions is
-          to travel. 🛫
+          👋 I&apos;m a software engineer and one of my biggest passions is to
+          travel. 🛫
           <br className="mb-1" />
-          📍
-          I&apos;m based on Spain, and my hometown is one of the best places in
-          earth 🌍 :{" "}
+          📍 I&apos;m based on Spain, and my hometown is one of the best places
+          in earth 🌍 :{" "}
           <span className="bg-gradient-to-r from-green-600 to-blue-300 bg-clip-text text-transparent font-extrabold text-xl">
             Galicia
           </span>
           <br />
-          📷
-          One of the best things to travel for me is to carry my camera
+          📷 One of the best things to travel for me is to carry my camera
           everywhere, so I can create custom memories, that afterwards I like to
           share.
         </p>
@@ -106,7 +104,13 @@ const Landing: FC = () => {
         />
       </div>
       <br />
-      <h1 className="text-2xl font-bold my-4">My recent gallery</h1>
+      <h1 className="text-2xl font-bold mb-2">My recent gallery</h1>
+      <div className="text-xs text-gray-500">
+        <p>
+          Showing {pagination.resultsPerPage * pagination.page} photos from{" "}
+          {totalCustomerPhotos}
+        </p>
+      </div>
       {isLoading && !isLoadingMore ? (
         <div className="flex justify-center items-center h-full">
           <LoadingIndicator isLoading={true} loadingSize="lg" />

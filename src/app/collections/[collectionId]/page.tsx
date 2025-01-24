@@ -1,23 +1,57 @@
 "use client";
 import { AvailableApis } from "@/apis/apis";
 import { motion } from "framer-motion";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Collection } from "@/models/Collections";
 import ImageGallery from "@/components/images/ImageGallery";
 import { Badge } from "@/components/shared/Badge";
 import { Pager } from "@/models/Pagination";
 
-
 const CollectionPage: React.FC<any> = ({ params }) => {
   const [collectionPhotos, setcollectionPhotos] = useState<Photo[]>([]);
-  const [pager, setPager] = useState<Pager>({page:1, resultsPerPage:10});
+  const [pager, setPager] = useState<Pager>({ page: 1, resultsPerPage: 10 });
   const [collectionInfo, setcollectionInfo] = useState<Collection>();
+  const observerRef = useRef<HTMLDivElement>(null);
+  const [isLoading, setisLoading] = useState(true);
+
+  const hasNextPage =
+    pager.page * pager.resultsPerPage <
+    (collectionInfo?.total_photos as number);
+
+  console.log(hasNextPage);
+
+  console.log(collectionInfo?.total_photos as number);
 
   useEffect(() => {
-    AvailableApis.fetchCollectionPhotos(params?.collectionId, pager).then((x) =>
-      setcollectionPhotos(x)
+    const node = observerRef.current;
+    if (!node || !hasNextPage || isLoading) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          setPager({ ...pager, page: pager.page + 1 });
+        }
+      },
+      { threshold: 0.5 }
     );
 
+    observer.observe(node);
+    return () => {
+      observer.disconnect();
+    };
+  }, [hasNextPage, isLoading, pager, collectionInfo]);
+
+  useEffect(() => {
+    setisLoading(true);
+    AvailableApis.fetchCollectionPhotos(params?.collectionId, pager).then(
+      (x) => {
+        setcollectionPhotos([...collectionPhotos, x].flat());
+        setisLoading(false);
+      }
+    );
+  }, [pager]);
+
+  useEffect(() => {
     AvailableApis.fetchCollection(params?.collectionId).then((x) =>
       setcollectionInfo(x)
     );
@@ -38,8 +72,8 @@ const CollectionPage: React.FC<any> = ({ params }) => {
 
       <div className="mt-5 text-center">
         {collectionInfo.tags.map((tag, indx) => (
-          <Badge text={tag.title} key={indx}/>
-        ))}
+          <Badge text={tag.title} key={indx} />
+        ))}x
       </div>
 
       <motion.div
@@ -50,6 +84,7 @@ const CollectionPage: React.FC<any> = ({ params }) => {
       >
         <ImageGallery photos={collectionPhotos} />
       </motion.div>
+      {hasNextPage && <div ref={observerRef} className="h-10 w-full" />}
     </div>
   );
 };
