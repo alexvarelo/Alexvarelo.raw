@@ -13,11 +13,26 @@ import { NumberTicker } from "@/components/shared/NumberTicker";
 import { Badge } from "@/components/shared/Badge";
 import { Blurhash } from "react-blurhash";
 import { cn } from "@/lib/utils";
+import { useRouter } from "next/navigation";
+import { IoChevronBack, IoChevronForward } from "react-icons/io5";
+import { useImageNavigation } from "@/contexts/ImageNavigationContext";
+import ImageDetailSkeleton from "@/components/skeletons/ImageDetailSkeleton";
+import { ImageNavigationButtons } from "@/components/shared/ImageNavigationButtons";
 
-const ImageDetail: React.FC<any> = ({ params }) => {
+interface PageProps {
+  params: { imageId: string };
+}
+
+const ImageDetail: React.FC<PageProps> = ({ params }) => {
+  const router = useRouter();
   const [photo, setPhoto] = useState<PhotoDetails | null>(null);
   const [photoStats, setPhotoStats] = useState<ImageStats | null>(null);
   const [isLoaded, setIsLoaded] = useState(false);
+  const { navigation } = useImageNavigation();
+
+  // Get next/prev image IDs
+  const nextImageId = navigation.nextImage[params.imageId];
+  const prevImageId = navigation.prevImage[params.imageId];
 
   useEffect(() => {
     const fetchImageData = async () => {
@@ -38,14 +53,21 @@ const ImageDetail: React.FC<any> = ({ params }) => {
     fetchImageStats();
   }, [params]);
 
-  if (!photo) return <div>Loading...</div>;
+  const handleNavigation = (direction: "next" | "prev") => {
+    const imageId = direction === "next" ? nextImageId : prevImageId;
+    if (imageId) {
+      router.push(`/image/${imageId}`);
+    }
+  };
+
+  if (!photo) return <ImageDetailSkeleton isVertical={false} />;
 
   const highlightClass = "text-gold font-bold";
 
   const imageIsVertical = photo.height > photo.width;
 
   return (
-    <div className="p-4 md:p-6">
+    <div className="p-4 md:p-6 relative">
       <motion.div
         initial={{ opacity: 0, y: 50 }}
         animate={{ opacity: 1, y: 0 }}
@@ -57,7 +79,7 @@ const ImageDetail: React.FC<any> = ({ params }) => {
             imageIsVertical && "lg:flex-row"
           )}
         >
-          <div className="flex-1 flex items-center justify-center relative bg-blue-100">
+          <div className="flex-1 flex items-center justify-center relative">
             {photo.blur_hash && !isLoaded && (
               <div className="absolute inset-0">
                 <Blurhash hash={photo.blur_hash} width="100%" height="100%" />
@@ -77,7 +99,17 @@ const ImageDetail: React.FC<any> = ({ params }) => {
 
           {/* Sidebar Section */}
           <div className="flex-1 space-y-6 text-sm lg:pl-10 pt-10">
-            <h2 className="text-3xl font-bold mb-2">{photo.description}</h2>
+            <div className="flex items-start justify-between">
+              <h2 className="text-3xl font-bold mb-2">{photo.description}</h2>
+              
+              <ImageNavigationButtons
+                onPrevClick={() => handleNavigation("prev")}
+                onNextClick={() => handleNavigation("next")}
+                prevDisabled={!prevImageId}
+                nextDisabled={!nextImageId}
+              />
+            </div>
+
             <div className="flex items-center gap-2">
               {photo?.exif?.make?.toLowerCase().includes("apple") ? (
                 <FaApple className="text-gray-500" />

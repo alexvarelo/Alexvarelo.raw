@@ -4,6 +4,7 @@ import { ThemeProvider } from "@/components/context/ThemeContext";
 import ClientThemeWrapper from "@/components/context/CliehtThemeWrapper";
 import NavbarHeader from "@/components/NavbarHeader";
 import Footer from "@/components/Footer";
+import { ImageNavigationProvider } from "@/contexts/ImageNavigationContext";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -23,11 +24,13 @@ export default function RootLayout({
       <body className={inter.className}>
         <ThemeProvider>
           <ClientThemeWrapper>
-            <NavbarHeader />
-            <div className="flex flex-col min-h-screen">
-              <div className="flex-grow container mx-auto p-4">{children}</div>
-            </div>
-            <Footer />
+            <ImageNavigationProvider>
+              <NavbarHeader />
+              <div className="flex flex-col min-h-screen">
+                <div className="flex-grow container mx-auto p-4">{children}</div>
+              </div>
+              <Footer />
+            </ImageNavigationProvider>
           </ClientThemeWrapper>
         </ThemeProvider>
       </body>

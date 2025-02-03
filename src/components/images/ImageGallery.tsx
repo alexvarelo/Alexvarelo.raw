@@ -1,15 +1,21 @@
-import { useRouter } from "next/navigation";
+import { useEffect } from "react";
 import Masonry from "react-masonry-css";
-import { Blurhash } from 'react-blurhash';
 import ImageGridItem from "./ImageGridItem";
+import { useImageNavigation } from "@/contexts/ImageNavigationContext";
 
 const ImageGallery: React.FC<{ photos: Photo[] }> = ({ photos }) => {
+  const { setImageNavigation } = useImageNavigation();
   const breakPoints = {
     default: 3,
     1100: 2,
     700: 2,
   };
 
+  useEffect(() => {
+    if (photos.length) {
+      setImageNavigation(photos);
+    }
+  }, [photos]);
 
   return (
     <div>
@@ -19,7 +25,7 @@ const ImageGallery: React.FC<{ photos: Photo[] }> = ({ photos }) => {
         columnClassName="my-masonry-grid_column"
       >
         {photos.map((image) => (
-          <ImageGridItem image={image} key={image.id}/>
+          <ImageGridItem image={image} key={image.id} />
         ))}
       </Masonry>
     </div>
