@@ -14,7 +14,6 @@ import { Badge } from "@/components/shared/Badge";
 import { Blurhash } from "react-blurhash";
 import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
-import { IoChevronBack, IoChevronForward } from "react-icons/io5";
 import { useImageNavigation } from "@/contexts/ImageNavigationContext";
 import ImageDetailSkeleton from "@/components/skeletons/ImageDetailSkeleton";
 import { ImageNavigationButtons } from "@/components/shared/ImageNavigationButtons";
@@ -30,7 +29,6 @@ const ImageDetail: React.FC<PageProps> = ({ params }) => {
   const [isLoaded, setIsLoaded] = useState(false);
   const { navigation } = useImageNavigation();
 
-  // Get next/prev image IDs
   const nextImageId = navigation.nextImage[params.imageId];
   const prevImageId = navigation.prevImage[params.imageId];
 

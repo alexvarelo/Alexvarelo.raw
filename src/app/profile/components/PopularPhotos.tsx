@@ -1,18 +1,22 @@
 import { AvailableApis } from "@/apis/apis";
-import Image from "next/image";
+import { useUserPhoto } from "@/contexts/UserPhotoContext";
 import { FunctionComponent, useEffect, useState } from "react";
 
 interface PopularPhotosProps {}
 
 const PopularPhotos: FunctionComponent<PopularPhotosProps> = () => {
+  const { setUser } = useUserPhoto();
   const [photos, setPhotos] = useState<Photo[]>([]);
 
   useEffect(() => {
-    AvailableApis.fetchUserPhotos(1, 10, "popular", "portrait").then(setPhotos);
+    AvailableApis.fetchUserPhotos(1, 10, "popular", "portrait").then((result) => {
+      setPhotos(result);
+      setUser(result[0].user);
+    });
   }, []);
   return (
     <div className="carousel rounded-box mt-5">
-      {photos.map((photo) => (
+      {photos?.map((photo) => (
         <div className="carousel-item" key={photo?.id}>
           <img
             src={photo?.urls.regular}

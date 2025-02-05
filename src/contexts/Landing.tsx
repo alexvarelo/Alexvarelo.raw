@@ -5,12 +5,13 @@ import StatsContainer from "@/components/StatsContainer";
 import LoadingIndicator from "@/components/loading/LoadingIndicator";
 import { motion } from "framer-motion";
 import ImageGallery from "@/components/images/ImageGallery";
+import { useUserPhoto } from "@/contexts/UserPhotoContext";
 
 const Landing: FC = () => {
   const [photos, setPhotos] = useState<Photo[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
-
+  const { setUser } = useUserPhoto();
   const containerRef = useRef<HTMLDivElement | null>(null);
 
   const [pagination, setPagination] = useState<Pager>({
@@ -28,12 +29,13 @@ const Landing: FC = () => {
       pagination.resultsPerPage
     ).then((result) => {
       setPhotos([...photos, result].flat());
+      setUser(result[0].user);
       setIsLoading(false);
       setIsLoadingMore(false);
     });
   }, [pagination]);
 
-  const handleScroll = (event: React.WheelEvent<HTMLDivElement>) => {
+  const handleScroll = () => {
     if (pagination.page > totalCustomerPhotos / pagination.resultsPerPage) {
       return;
     }

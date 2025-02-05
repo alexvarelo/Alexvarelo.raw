@@ -6,9 +6,11 @@ import { useState, useEffect } from "react";
 import PopularPhotos from "./components/PopularPhotos";
 import { Checks } from "../utils/checks";
 import { NumberTicker } from "@/components/shared/NumberTicker";
+import { useUserPhoto } from "@/contexts/UserPhotoContext";
 
 const Profile = () => {
   const [stats, setStats] = useState<Statistics>();
+  const { user } = useUserPhoto();
 
   useEffect(() => {
     AvailableApis.fetchStats().then((result) => setStats(result));
@@ -86,7 +88,7 @@ const Profile = () => {
           </div>
           {/*TODO: This is wrong, needs to be updated*/}
           <div className="stat-title">Photos uploaded</div>
-          <div className="stat-value">{stats?.views.historical.quantity}</div>
+          <div className="stat-value text-green-400">{user?.total_photos}</div>
           <div className="stat-desc">alexvarelo.raw</div>
         </div>
       </div>

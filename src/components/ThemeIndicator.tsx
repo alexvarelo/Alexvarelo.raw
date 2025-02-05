@@ -1,6 +1,6 @@
 "use client";
 import { FunctionComponent, useContext } from "react";
-import { ThemeContext } from "./context/ThemeContext";
+import { ThemeContext } from "../contexts/ThemeContext";
 
 interface ThemeIndicatorProps {}
 

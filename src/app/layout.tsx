@@ -1,10 +1,11 @@
 import { Inter } from "next/font/google";
 import "./globals.css";
-import { ThemeProvider } from "@/components/context/ThemeContext";
-import ClientThemeWrapper from "@/components/context/CliehtThemeWrapper";
+import { ThemeProvider } from "@/contexts/ThemeContext";
+import ClientThemeWrapper from "@/contexts/CliehtThemeWrapper";
 import NavbarHeader from "@/components/NavbarHeader";
 import Footer from "@/components/Footer";
 import { ImageNavigationProvider } from "@/contexts/ImageNavigationContext";
+import { UserPhotoProvider } from "@/contexts/UserPhotoContext";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -22,17 +23,19 @@ export default function RootLayout({
         <link rel="icon" href="/ProfileAvatar.png" />
       </head>
       <body className={inter.className}>
-        <ThemeProvider>
-          <ClientThemeWrapper>
-            <ImageNavigationProvider>
-              <NavbarHeader />
-              <div className="flex flex-col min-h-screen">
-                <div className="flex-grow container mx-auto p-4">{children}</div>
-              </div>
-              <Footer />
-            </ImageNavigationProvider>
-          </ClientThemeWrapper>
-        </ThemeProvider>
+        <UserPhotoProvider>
+          <ThemeProvider>
+            <ClientThemeWrapper>
+              <ImageNavigationProvider>
+                <NavbarHeader />
+                <div className="flex flex-col min-h-screen">
+                  <div className="flex-grow container mx-auto p-4">{children}</div>
+                </div>
+                <Footer />
+              </ImageNavigationProvider>
+            </ClientThemeWrapper>
+          </ThemeProvider>
+        </UserPhotoProvider>
       </body>
     </html>
   );

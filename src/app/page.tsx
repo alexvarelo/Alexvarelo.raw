@@ -1,6 +1,6 @@
 "use client";
 
-import Landing from "@/pages/Landing";
+import Landing from "@/contexts/Landing";
 
 
 export default function Home() {
