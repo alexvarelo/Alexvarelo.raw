@@ -6,6 +6,7 @@ import NavbarHeader from "@/components/NavbarHeader";
 import Footer from "@/components/Footer";
 import { ImageNavigationProvider } from "@/contexts/ImageNavigationContext";
 import { UserPhotoProvider } from "@/contexts/UserPhotoContext";
+import { APP_CONFIG } from "@/constants/app";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -18,9 +19,9 @@ export default function RootLayout({
   return (
     <html lang="en">
       <head>
-        <title>Alexvarelo.raw</title>
-        <meta name="description" content="My personal photo portfolio" />
-        <link rel="icon" href="/ProfileAvatar.png" />
+        <title>{APP_CONFIG.title}</title>
+        <meta name="description" content={APP_CONFIG.description} />
+        <link rel="icon" href={APP_CONFIG.avatar} />
       </head>
       <body className={inter.className}>
         <UserPhotoProvider>

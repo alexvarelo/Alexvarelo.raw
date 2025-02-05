@@ -12,48 +12,60 @@ const Landing: FC = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [isLoadingMore, setIsLoadingMore] = useState(false);
   const { setUser } = useUserPhoto();
-  const containerRef = useRef<HTMLDivElement | null>(null);
+  const observerRef = useRef<HTMLDivElement>(null);
 
-  const [pagination, setPagination] = useState<Pager>({
+  const [pager, setPager] = useState<Pager>({
     page: 1,
     resultsPerPage: 12,
   });
 
+  const hasNextPage =
+    pager.page * pager.resultsPerPage <
+    (photos?.[0]?.user?.total_photos as number);
+
+
   useEffect(() => {
-    if (pagination.page > 1) {
+    const node = observerRef.current;
+    if (!node || !hasNextPage || isLoading) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          setPager({ ...pager, page: pager.page + 1 });
+        }
+      },
+      { threshold: 0.5 }
+    );
+
+    observer.observe(node);
+    return () => {
+      observer.disconnect();
+    };
+  }, [hasNextPage, isLoading, pager, photos]);
+
+  useEffect(() => {
+    if (pager.page > 1) {
       setIsLoadingMore(true);
     }
     setIsLoading(true);
     AvailableApis.fetchUserPhotos(
-      pagination.page,
-      pagination.resultsPerPage
+      pager.page,
+      pager.resultsPerPage,
+      "views",
+      "landscape"
     ).then((result) => {
       setPhotos([...photos, result].flat());
-      setUser(result[0].user);
+      setUser(result[0]?.user);
       setIsLoading(false);
       setIsLoadingMore(false);
     });
-  }, [pagination]);
-
-  const handleScroll = () => {
-    if (pagination.page > totalCustomerPhotos / pagination.resultsPerPage) {
-      return;
-    }
-    const scrollTop = window.scrollY;
-    const windowHeight = window.innerHeight;
-    const fullHeight = document.documentElement.scrollHeight;
-
-    // Check if the user is at the bottom
-    if (scrollTop + windowHeight >= fullHeight - 10) {
-      setPagination((prev) => ({ ...prev, page: prev.page + 1 }));
-    }
-  };
+  }, [pager]);
 
   const totalCustomerPhotos = photos?.[0]?.user?.total_photos;
   const profileImage = photos?.[0]?.user?.profile_image?.large;
 
   return (
-    <div onWheel={handleScroll} ref={containerRef}>
+    <div>
       <div className="avatar">
         <div className="ring-primary ring-offset-base-100 w-24 rounded-full">
           <img src={profileImage} />
@@ -109,7 +121,7 @@ const Landing: FC = () => {
       <h1 className="text-2xl font-bold mb-2">My recent gallery</h1>
       <div className="text-xs text-gray-500">
         <p>
-          Showing {pagination.resultsPerPage * pagination.page} photos from{" "}
+          Showing {pager.resultsPerPage * pager.page} photos from{" "}
           {totalCustomerPhotos}
         </p>
       </div>
@@ -130,6 +142,7 @@ const Landing: FC = () => {
               <LoadingIndicator isLoading={true} loadingSize="lg" />
             </div>
           )}
+          {hasNextPage && <div ref={observerRef} className="h-10 w-full" />}
         </motion.div>
       )}
     </div>

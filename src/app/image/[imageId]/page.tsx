@@ -17,6 +17,7 @@ import { useRouter } from "next/navigation";
 import { useImageNavigation } from "@/contexts/ImageNavigationContext";
 import ImageDetailSkeleton from "@/components/skeletons/ImageDetailSkeleton";
 import { ImageNavigationButtons } from "@/components/shared/ImageNavigationButtons";
+import { DownloadButton } from "@/components/shared/DownloadButton";
 
 interface PageProps {
   params: { imageId: string };
@@ -98,7 +99,13 @@ const ImageDetail: React.FC<PageProps> = ({ params }) => {
           {/* Sidebar Section */}
           <div className="flex-1 space-y-6 text-sm lg:pl-10 pt-10">
             <div className="flex items-start justify-between">
-              <h2 className="text-3xl font-bold mb-2">{photo.description}</h2>
+              <div className="space-y-2">
+                <h2 className="text-3xl font-bold mb-2">{photo.description}</h2>
+                <DownloadButton 
+                  url={photo.urls.raw} 
+                  filename={`${photo.id}.jpg`}
+                />
+              </div>
               
               <ImageNavigationButtons
                 onPrevClick={() => handleNavigation("prev")}

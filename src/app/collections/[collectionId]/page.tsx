@@ -18,9 +18,6 @@ const CollectionPage: React.FC<any> = ({ params }) => {
     pager.page * pager.resultsPerPage <
     (collectionInfo?.total_photos as number);
 
-  console.log(hasNextPage);
-
-  console.log(collectionInfo?.total_photos as number);
 
   useEffect(() => {
     const node = observerRef.current;
