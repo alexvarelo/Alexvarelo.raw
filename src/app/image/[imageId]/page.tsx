@@ -98,20 +98,22 @@ const ImageDetail: React.FC<PageProps> = ({ params }) => {
 
           {/* Sidebar Section */}
           <div className="flex-1 space-y-6 text-sm lg:pl-10 pt-10">
-            <div className="flex items-start justify-between">
+            <div className="flex flex-col space-y-4 md:flex-row md:space-y-0 md:items-start md:justify-between">
               <div className="space-y-2">
-                <h2 className="text-4xl font-bold mb-2">{photo.description}</h2>
+                <h2 className="text-3xl font-bold mb-2 md:text-4xl">
+                  {photo.description}
+                </h2>
               </div>
-              
-              <div className="flex flex-row items-end gap-4">
+
+              <div className="flex flex-row items-end gap-2 md:gap-4 scale-75 md:scale-100 origin-left md:origin-right">
                 <ImageNavigationButtons
                   onPrevClick={() => handleNavigation("prev")}
                   onNextClick={() => handleNavigation("next")}
                   prevDisabled={!prevImageId}
                   nextDisabled={!nextImageId}
                 />
-                <DownloadButton 
-                  url={photo.urls.raw} 
+                <DownloadButton
+                  url={photo.urls.raw}
                   filename={`${photo.id}.jpg`}
                 />
               </div>
