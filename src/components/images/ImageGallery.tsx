@@ -3,7 +3,7 @@ import Masonry from "react-masonry-css";
 import ImageGridItem from "./ImageGridItem";
 import { useImageNavigation } from "@/contexts/ImageNavigationContext";
 
-const ImageGallery: React.FC<{ photos: Photo[] }> = ({ photos }) => {
+const ImageGallery: React.FC<{ photos: Photo[], showPhotoStats?: boolean }> = ({ photos, showPhotoStats = false }) => {
   const { setImageNavigation } = useImageNavigation();
   const breakPoints = {
     default: 3,
@@ -25,7 +25,7 @@ const ImageGallery: React.FC<{ photos: Photo[] }> = ({ photos }) => {
         columnClassName="my-masonry-grid_column"
       >
         {photos.map((image) => (
-          <ImageGridItem image={image} key={image.id} />
+          <ImageGridItem image={image} key={image.id} showPhotoStats={showPhotoStats} />
         ))}
       </Masonry>
     </div>

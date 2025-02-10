@@ -23,7 +23,6 @@ const Landing: FC = () => {
     pager.page * pager.resultsPerPage <
     (photos?.[0]?.user?.total_photos as number);
 
-
   useEffect(() => {
     const node = observerRef.current;
     if (!node || !hasNextPage || isLoading) return;
@@ -51,8 +50,7 @@ const Landing: FC = () => {
     AvailableApis.fetchUserPhotos(
       pager.page,
       pager.resultsPerPage,
-      "views",
-      "landscape"
+      "popular"
     ).then((result) => {
       setPhotos([...photos, result].flat());
       setUser(result[0]?.user);
@@ -118,7 +116,7 @@ const Landing: FC = () => {
         />
       </div>
       <br />
-      <h1 className="text-2xl font-bold mb-2">My recent gallery</h1>
+      <h1 className="text-2xl font-bold mb-2">My popular gallery</h1>
       <div className="text-xs text-gray-500">
         <p>
           Showing {pager.resultsPerPage * pager.page} photos from{" "}
@@ -136,7 +134,7 @@ const Landing: FC = () => {
           transition={{ duration: 3 }}
           className="pt-10"
         >
-          <ImageGallery photos={photos} />
+          <ImageGallery photos={photos} showPhotoStats={true} />
           {isLoadingMore && (
             <div className="flex justify-center items-center h-full">
               <LoadingIndicator isLoading={true} loadingSize="lg" />

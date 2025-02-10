@@ -67,10 +67,10 @@ const CollectionPage: React.FC<any> = ({ params }) => {
         <p>{new Date(collectionInfo.published_at).toLocaleDateString()}</p>
       </div>
 
-      <div className="mt-5 text-center">
+      <div className="mt-5 text-center flex flex-wrap gap-y-2 justify-center">
         {collectionInfo.tags.map((tag, indx) => (
           <Badge text={tag.title} key={indx} />
-        ))}x
+        ))}
       </div>
 
       <motion.div

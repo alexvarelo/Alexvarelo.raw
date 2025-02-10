@@ -52,6 +52,9 @@ const NavbarHeader = () => {
             <li>
               <Link href={"/profile"}>Statistics</Link>
             </li>
+            <li>
+              <Link href={"/atomic"}>Atomic</Link>
+            </li>
           </ul>
         </div>
       </div>
@@ -72,6 +75,9 @@ const NavbarHeader = () => {
           </li>
           <li>
             <Link href={"/profile"}>Statistics</Link>
+          </li>
+          <li>
+            <Link href={"/atomic"}>Atomic</Link>
           </li>
         </ul>
       </div>

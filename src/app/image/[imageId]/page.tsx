@@ -100,22 +100,24 @@ const ImageDetail: React.FC<PageProps> = ({ params }) => {
           <div className="flex-1 space-y-6 text-sm lg:pl-10 pt-10">
             <div className="flex items-start justify-between">
               <div className="space-y-2">
-                <h2 className="text-3xl font-bold mb-2">{photo.description}</h2>
+                <h2 className="text-4xl font-bold mb-2">{photo.description}</h2>
+              </div>
+              
+              <div className="flex flex-row items-end gap-4">
+                <ImageNavigationButtons
+                  onPrevClick={() => handleNavigation("prev")}
+                  onNextClick={() => handleNavigation("next")}
+                  prevDisabled={!prevImageId}
+                  nextDisabled={!nextImageId}
+                />
                 <DownloadButton 
                   url={photo.urls.raw} 
                   filename={`${photo.id}.jpg`}
                 />
               </div>
-              
-              <ImageNavigationButtons
-                onPrevClick={() => handleNavigation("prev")}
-                onNextClick={() => handleNavigation("next")}
-                prevDisabled={!prevImageId}
-                nextDisabled={!nextImageId}
-              />
             </div>
 
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 text-sm font-extrabold">
               {photo?.exif?.make?.toLowerCase().includes("apple") ? (
                 <FaApple className="text-gray-500" />
               ) : (
