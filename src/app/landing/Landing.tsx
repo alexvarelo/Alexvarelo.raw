@@ -1,5 +1,5 @@
 import { useState, useEffect, FC, useRef, useMemo } from "react";
-import { AvailableApis } from "../apis/apis";
+import { AvailableApis } from "../../apis/apis";
 import { Pager } from "@/models/Pagination";
 import StatsContainer from "@/components/StatsContainer";
 import LoadingIndicator from "@/components/loading/LoadingIndicator";
