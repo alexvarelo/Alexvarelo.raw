@@ -21,7 +21,6 @@ export function ImageNavigationProvider({ children }: { children: ReactNode }) {
     prevImage: {},
   });
 
-  console.log("navigation", navigation);
   const setImageNavigation = (photos: Photo[]) => {
     const nextImageMap: Record<string, string> = {};
     const prevImageMap: Record<string, string> = {};

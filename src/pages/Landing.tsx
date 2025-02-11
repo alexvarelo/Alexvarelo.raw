@@ -1,4 +1,4 @@
-import { useState, useEffect, FC, useRef } from "react";
+import { useState, useEffect, FC, useRef, useMemo } from "react";
 import { AvailableApis } from "../apis/apis";
 import { Pager } from "@/models/Pagination";
 import StatsContainer from "@/components/StatsContainer";
@@ -19,9 +19,12 @@ const Landing: FC = () => {
     resultsPerPage: 12,
   });
 
-  const hasNextPage =
-    pager.page * pager.resultsPerPage <
-    (photos?.[0]?.user?.total_photos as number);
+  const hasNextPage = useMemo(() => {
+    return (
+      pager.page * pager.resultsPerPage <
+      (photos?.[0]?.user?.total_photos as number)
+    );
+  }, [pager, photos]);
 
   useEffect(() => {
     const node = observerRef.current;
@@ -73,7 +76,7 @@ const Landing: FC = () => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 1 }}
-        className="text-3xl font-bold my-6"
+        className="md:text-3xl text-2xl font-bold my-4"
       >
         <span className="bg-gradient-to-r from-blue-400 to-blue-600 bg-clip-text text-transparent">
           Alexvarelo.raw
@@ -91,7 +94,7 @@ const Landing: FC = () => {
           <br className="mb-1" />
           📍 I&apos;m based on Spain, and my hometown is one of the best places
           in earth 🌍 :{" "}
-          <span className="bg-gradient-to-r from-green-600 to-blue-300 bg-clip-text text-transparent font-extrabold text-xl">
+          <span className="bg-gradient-to-r from-green-600 to-blue-300 bg-clip-text text-transparent font-extrabold">
             Galicia
           </span>
           <br />
@@ -102,7 +105,7 @@ const Landing: FC = () => {
       </motion.h1>
 
       <br />
-      <h2 className="text-2xl font-semibold my-4">Photos summary</h2>
+      <h2 className="md:text-2xl text-xl font-bold my-4">Photos summary</h2>
       <div className="flex justify-center items-center gap-4 md:gap-2">
         <StatsContainer
           title={"Photos"}
@@ -116,7 +119,7 @@ const Landing: FC = () => {
         />
       </div>
       <br />
-      <h1 className="text-2xl font-bold mb-2">My popular gallery</h1>
+      <h1 className="md:text-2xl text-xl font-bold mb-2">My popular gallery</h1>
       <div className="text-xs text-gray-500">
         <p>
           Showing {pager.resultsPerPage * pager.page} photos from{" "}
@@ -136,7 +139,7 @@ const Landing: FC = () => {
         >
           <ImageGallery photos={photos} showPhotoStats={true} />
           {isLoadingMore && (
-            <div className="flex justify-center items-center h-full">
+            <div className="flex justify-center items-center h-full mb-96">
               <LoadingIndicator isLoading={true} loadingSize="lg" />
             </div>
           )}
