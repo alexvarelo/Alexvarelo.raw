@@ -38,7 +38,9 @@ const fetchUserPhotos = async (
   const result = await axios.get(
     `https://api.unsplash.com/users/${UNSPLASH_USERNAME}/photos?page=${currentPage}&per_page=${resultsPerPage}&order_by=${
       orderBy ?? "latest"
-    }${orientation ? `&orientation=${orientation}` : ""}`,
+    }${orientation ? `&orientation=${orientation}` : ""}${
+      fetchStats ? "&stats=true" : ""
+    }`,
     {
       headers: HEADERS,
     }
@@ -47,9 +49,12 @@ const fetchUserPhotos = async (
 };
 
 const fetchUserProfile = async () => {
-  const result = await axios.get(`https://api.unsplash.com/users/${UNSPLASH_USERNAME}`, {
-    headers: HEADERS,
-  });
+  const result = await axios.get(
+    `https://api.unsplash.com/users/${UNSPLASH_USERNAME}`,
+    {
+      headers: HEADERS,
+    }
+  );
   return result.data;
 };
 

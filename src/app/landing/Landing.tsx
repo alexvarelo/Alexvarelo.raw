@@ -78,9 +78,15 @@ const Landing: FC = () => {
         transition={{ duration: 1 }}
         className="md:text-3xl text-2xl font-bold my-4"
       >
-        <span className="bg-gradient-to-r from-blue-400 to-blue-600 bg-clip-text text-transparent">
-          Alexvarelo.raw
-        </span>
+        <a
+          href="https://www.instagram.com/alexvarelo.raw"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          <span className="bg-gradient-to-r from-blue-400 to-blue-600 bg-clip-text text-transparent">
+            Alexvarelo.raw
+          </span>
+        </a>
         , <br className="mb-10" /> But you can call me Alex
       </motion.h1>
       <motion.h1

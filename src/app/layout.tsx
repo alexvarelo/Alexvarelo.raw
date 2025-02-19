@@ -7,9 +7,9 @@ import Footer from "@/components/Footer";
 import { ImageNavigationProvider } from "@/contexts/ImageNavigationContext";
 import { UserPhotoProvider } from "@/contexts/UserPhotoContext";
 import { APP_CONFIG } from "@/constants/app";
+import { Analytics } from "@vercel/analytics/react";
 
 const inter = Inter({ subsets: ["latin"] });
-
 
 export default function RootLayout({
   children,
@@ -30,13 +30,16 @@ export default function RootLayout({
               <ImageNavigationProvider>
                 <NavbarHeader />
                 <div className="flex flex-col min-h-screen">
-                  <div className="flex-grow container mx-auto p-4">{children}</div>
+                  <div className="flex-grow container mx-auto p-4">
+                    {children}
+                  </div>
                 </div>
                 <Footer />
               </ImageNavigationProvider>
             </ClientThemeWrapper>
           </ThemeProvider>
         </UserPhotoProvider>
+        <Analytics />
       </body>
     </html>
   );

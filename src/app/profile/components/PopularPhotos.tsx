@@ -21,7 +21,7 @@ const PopularPhotos: FunctionComponent<PopularPhotosProps> = () => {
           <img
             src={photo?.urls.regular}
             alt={photo?.description}
-            className="w-[300px] h-[400px] object-cover rounded"
+            className=" w-[300px] h-[500px] sm:w-[500px] sm:h-[600px] object-cover rounded"
           />
         </div>
       ))}
