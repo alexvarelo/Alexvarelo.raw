@@ -3,10 +3,11 @@ import axios from "axios";
 import { convertToStatistics } from "./helpers/DataMapping";
 import { Pager } from "@/models/Pagination";
 import { APP_CONFIG } from "@/constants/app";
+import { useQuery } from "react-query";
 
-const UNSPLASH_USERNAME = APP_CONFIG.unsplash.username;
+export const UNSPLASH_USERNAME = APP_CONFIG.unsplash.username;
 
-const HEADERS = {
+export const HEADERS = {
   Authorization: `Client-ID ${process.env.NEXT_PUBLIC_UNSPLASH_AUTH_KEY}`,
 };
 
@@ -26,6 +27,14 @@ const fetchStats = async (): Promise<Statistics> => {
     }
   );
   return convertToStatistics(result.data);
+};
+
+export const useFetchStats = () => {
+  return useQuery<Statistics, Error>("fetchStats", fetchStats, {
+    staleTime: 1000 * 60 * 5, // 5 minutes
+    cacheTime: 1000 * 60 * 10, // 10 minutes
+    refetchOnWindowFocus: false,
+  });
 };
 
 const fetchUserPhotos = async (

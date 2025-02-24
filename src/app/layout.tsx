@@ -8,6 +8,7 @@ import { ImageNavigationProvider } from "@/contexts/ImageNavigationContext";
 import { UserPhotoProvider } from "@/contexts/UserPhotoContext";
 import { APP_CONFIG } from "@/constants/app";
 import { Analytics } from "@vercel/analytics/react";
+import QueryProvider from "@/contexts/ReactQueryContext";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -24,21 +25,23 @@ export default function RootLayout({
         <link rel="icon" href={APP_CONFIG.avatar} />
       </head>
       <body className={inter.className}>
-        <UserPhotoProvider>
-          <ThemeProvider>
-            <ClientThemeWrapper>
-              <ImageNavigationProvider>
-                <NavbarHeader />
-                <div className="flex flex-col min-h-screen">
-                  <div className="flex-grow container mx-auto p-4">
-                    {children}
+        <QueryProvider>
+          <UserPhotoProvider>
+            <ThemeProvider>
+              <ClientThemeWrapper>
+                <ImageNavigationProvider>
+                  <NavbarHeader />
+                  <div className="flex flex-col min-h-screen">
+                    <div className="flex-grow container mx-auto p-4">
+                      {children}
+                    </div>
                   </div>
-                </div>
-                <Footer />
-              </ImageNavigationProvider>
-            </ClientThemeWrapper>
-          </ThemeProvider>
-        </UserPhotoProvider>
+                  <Footer />
+                </ImageNavigationProvider>
+              </ClientThemeWrapper>
+            </ThemeProvider>
+          </UserPhotoProvider>
+        </QueryProvider>
         <Analytics />
       </body>
     </html>

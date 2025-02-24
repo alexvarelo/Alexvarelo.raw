@@ -6,25 +6,39 @@ import LoadingIndicator from "@/components/loading/LoadingIndicator";
 import { motion } from "framer-motion";
 import ImageGallery from "@/components/images/ImageGallery";
 import { useUserPhoto } from "@/contexts/UserPhotoContext";
+import { useUserPhotos } from "@/apis/user/UserPhotosApi";
 
 const Landing: FC = () => {
-  const [photos, setPhotos] = useState<Photo[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
-  const [isLoadingMore, setIsLoadingMore] = useState(false);
   const { setUser } = useUserPhoto();
   const observerRef = useRef<HTMLDivElement>(null);
 
-  const [pager, setPager] = useState<Pager>({
-    page: 1,
-    resultsPerPage: 12,
-  });
+  const {
+    data: photosResponse,
+    isLoading,
+    isFetchingNextPage,
+    hasNextPage,
+    fetchNextPage,
+  } = useUserPhotos(
+    {
+      currentPage: 1,
+      resultsPerPage: 12,
+      orderBy: "popular",
+    },
+    {
+      getNextPageParam: (
+        lastPage: { user: { total_photos: any } }[],
+        allPages: string | any[]
+      ) => {
+        const totalPhotos = lastPage[0]?.user?.total_photos;
+        const nextPage = allPages.length + 1;
+        return nextPage * 12 < totalPhotos ? nextPage : undefined;
+      },
+    }
+  );
 
-  const hasNextPage = useMemo(() => {
-    return (
-      pager.page * pager.resultsPerPage <
-      (photos?.[0]?.user?.total_photos as number)
-    );
-  }, [pager, photos]);
+  const photos = useMemo(() => {
+    return photosResponse?.pages?.flat() ?? [];
+  }, [photosResponse]);
 
   useEffect(() => {
     const node = observerRef.current;
@@ -33,7 +47,8 @@ const Landing: FC = () => {
     const observer = new IntersectionObserver(
       (entries) => {
         if (entries[0].isIntersecting) {
-          setPager({ ...pager, page: pager.page + 1 });
+          fetchNextPage();
+          //setPager({ ...pager, page: pager.page + 1 });
         }
       },
       { threshold: 0.5 }
@@ -43,24 +58,7 @@ const Landing: FC = () => {
     return () => {
       observer.disconnect();
     };
-  }, [hasNextPage, isLoading, pager, photos]);
-
-  useEffect(() => {
-    if (pager.page > 1) {
-      setIsLoadingMore(true);
-    }
-    setIsLoading(true);
-    AvailableApis.fetchUserPhotos(
-      pager.page,
-      pager.resultsPerPage,
-      "popular"
-    ).then((result) => {
-      setPhotos([...photos, result].flat());
-      setUser(result[0]?.user);
-      setIsLoading(false);
-      setIsLoadingMore(false);
-    });
-  }, [pager]);
+  }, [hasNextPage, isLoading, photos]);
 
   const totalCustomerPhotos = photos?.[0]?.user?.total_photos;
   const profileImage = photos?.[0]?.user?.profile_image?.large;
@@ -128,11 +126,10 @@ const Landing: FC = () => {
       <h1 className="md:text-2xl text-xl font-bold mb-2">My popular gallery</h1>
       <div className="text-xs text-gray-500">
         <p>
-          Showing {pager.resultsPerPage * pager.page} photos from{" "}
-          {totalCustomerPhotos}
+          Showing {photos.length} photos from {totalCustomerPhotos}
         </p>
       </div>
-      {isLoading && !isLoadingMore ? (
+      {isLoading && !isFetchingNextPage ? (
         <div className="flex justify-center items-center h-full">
           <LoadingIndicator isLoading={true} loadingSize="lg" />
         </div>
@@ -144,7 +141,7 @@ const Landing: FC = () => {
           className="pt-10"
         >
           <ImageGallery photos={photos} showPhotoStats={true} />
-          {isLoadingMore && (
+          {isFetchingNextPage && (
             <div className="flex justify-center items-center h-full mb-96">
               <LoadingIndicator isLoading={true} loadingSize="lg" />
             </div>
