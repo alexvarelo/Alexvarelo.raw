@@ -7,6 +7,7 @@ import PopularPhotos from "./components/PopularPhotos";
 import { Checks } from "../utils/checks";
 import { NumberTicker } from "@/components/shared/NumberTicker";
 import { useUserPhoto } from "@/contexts/UserPhotoContext";
+import { Press } from "@/components/shared/CompaniesAnimatedCarousel";
 
 const Profile = () => {
   const [stats, setStats] = useState<Statistics>();
@@ -18,7 +19,7 @@ const Profile = () => {
 
   return (
     <>
-      <h2 className="text-3xl font-bold my-4 ml-2">My statistics  🎊</h2>
+      <h2 className="text-3xl font-bold my-4 ml-2">My statistics 🎊</h2>
 
       <div className="stats stats-vertical lg:stats-horizontal flex flex-wrap justify-center shadow">
         <div className="stat flex-1 min-w-[250px] m-2">
@@ -93,6 +94,16 @@ const Profile = () => {
         </div>
       </div>
       <br />
+      <div className="relative flex h-[500px] w-full flex-col items-center justify-center overflow-hidden">
+        <Press />
+        {/* <OrbitingCircles iconSize={40}>
+          <Icons.figma />
+          <Icons.buzzfeed />
+          <Icons.googleSlides />
+          <Icons.medium />
+          <Icons.gitHub />
+        </OrbitingCircles> */}
+      </div>
       <PopularPhotos />
     </>
   );

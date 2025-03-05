@@ -67,7 +67,7 @@ const Landing: FC = () => {
   return (
     <div>
       <div className="avatar">
-        <div className="ring-primary ring-offset-base-100 md:w-44 w-32 rounded-full">
+        <div className="ring-primary ring-offset-base-100 md:w-44 w-24 rounded-full">
           <img src={profileImage} />
         </div>
       </div>
@@ -75,14 +75,14 @@ const Landing: FC = () => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 1 }}
-        className="w-full md:text-9xl text-6xl leading-none font-black uppercase tracking-tighter mt-8"
+        className="w-full md:text-9xl text-4xl leading-none font-black uppercase tracking-tighter mt-8"
       >
         <a
           href="https://www.instagram.com/alexvarelo.raw"
           target="_blank"
           rel="noopener noreferrer"
         >
-          <span className="bg-gradient-to-r from-blue-400 to-blue-600 bg-clip-text text-transparent">
+          <span className="bg-gradient-to-r from-blue-300 to-blue-950 bg-clip-text text-transparent">
             Alexvarelo.raw
           </span>
         </a>
