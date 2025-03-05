@@ -7,6 +7,7 @@ import { motion } from "framer-motion";
 import ImageGallery from "@/components/images/ImageGallery";
 import { useUserPhoto } from "@/contexts/UserPhotoContext";
 import { useUserPhotos } from "@/apis/user/UserPhotosApi";
+import { AboutMeGrid } from "@/components/landing/AboutMeGrid";
 
 const Landing: FC = () => {
   const { setUser } = useUserPhoto();
@@ -66,7 +67,7 @@ const Landing: FC = () => {
   return (
     <div>
       <div className="avatar">
-        <div className="ring-primary ring-offset-base-100 w-24 rounded-full">
+        <div className="ring-primary ring-offset-base-100 md:w-44 w-32 rounded-full">
           <img src={profileImage} />
         </div>
       </div>
@@ -74,7 +75,7 @@ const Landing: FC = () => {
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 1 }}
-        className="md:text-3xl text-2xl font-bold my-4"
+        className="w-full md:text-9xl text-6xl leading-none font-black uppercase tracking-tighter mt-8"
       >
         <a
           href="https://www.instagram.com/alexvarelo.raw"
@@ -85,14 +86,14 @@ const Landing: FC = () => {
             Alexvarelo.raw
           </span>
         </a>
-        , <br className="mb-10" /> But you can call me Alex
+        <br className="mb-10" /> PHOTOS
       </motion.h1>
       <motion.h1
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 1.3 }}
       >
-        <p className="my-4 max-w-4xl">
+        {/* <p className="my-4 max-w-4xl">
           👋 I&apos;m a software engineer and one of my biggest passions is to
           travel. 🛫
           <br className="mb-1" />
@@ -105,9 +106,10 @@ const Landing: FC = () => {
           📷 One of the best things to travel for me is to carry my camera
           everywhere, so I can create custom memories, that afterwards I like to
           share.
-        </p>
+        </p> */}
       </motion.h1>
 
+      <AboutMeGrid images={photos?.slice(0, 4).map((x) => x.urls.regular)} />
       <br />
       <h2 className="md:text-2xl text-xl font-bold my-4">Photos summary</h2>
       <div className="flex justify-center items-center gap-4 md:gap-2">

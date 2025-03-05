@@ -51,7 +51,7 @@ const NavbarHeader = () => {
           </div>
         </a>
       </div>
-      <div className="navbar-center hidden lg:flex border border-solid rounded-3xl">
+      <div className="navbar-center hidden lg:flex">
         <ul className="menu menu-horizontal px-1">
           <li>
             <Link href={"/"}>Homepage</Link>

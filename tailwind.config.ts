@@ -84,7 +84,7 @@ const config: Config = {
   plugins: [require('daisyui'), require("tailwindcss-animate")],
   daisyui: {
     themes: [ 
-      "light",
+      "bumblebee",
       "business",
     ],
   }
