@@ -7,7 +7,8 @@ import PopularPhotos from "./components/PopularPhotos";
 import { Checks } from "../utils/checks";
 import { NumberTicker } from "@/components/shared/NumberTicker";
 import { useUserPhoto } from "@/contexts/UserPhotoContext";
-import { Press } from "@/components/shared/CompaniesAnimatedCarousel";
+import { CompaniesAnimatedCarousel } from "@/components/shared/CompaniesAnimatedCarousel";
+import GradientText from "@/components/text/GradientText";
 
 const Profile = () => {
   const [stats, setStats] = useState<Statistics>();
@@ -19,7 +20,10 @@ const Profile = () => {
 
   return (
     <>
-      <h2 className="text-3xl font-bold my-4 ml-2">My statistics 🎊</h2>
+      <h2 className="text-5xl font-extrabold my-6 ml-2">
+        <GradientText>.RAW </GradientText>
+        STATISTICS
+      </h2>
 
       <div className="stats stats-vertical lg:stats-horizontal flex flex-wrap justify-center shadow">
         <div className="stat flex-1 min-w-[250px] m-2">
@@ -94,16 +98,17 @@ const Profile = () => {
         </div>
       </div>
       <br />
-      <div className="relative flex h-[500px] w-full flex-col items-center justify-center overflow-hidden">
-        <Press />
-        {/* <OrbitingCircles iconSize={40}>
+      <br />
+      <CompaniesAnimatedCarousel />
+      {/* <OrbitingCircles iconSize={40}>
           <Icons.figma />
           <Icons.buzzfeed />
           <Icons.googleSlides />
           <Icons.medium />
           <Icons.gitHub />
         </OrbitingCircles> */}
-      </div>
+
+      <br />
       <PopularPhotos />
     </>
   );

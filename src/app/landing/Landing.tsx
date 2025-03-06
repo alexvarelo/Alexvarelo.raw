@@ -8,6 +8,8 @@ import ImageGallery from "@/components/images/ImageGallery";
 import { useUserPhoto } from "@/contexts/UserPhotoContext";
 import { useUserPhotos } from "@/apis/user/UserPhotosApi";
 import { AboutMeGrid } from "@/components/landing/AboutMeGrid";
+import GradientText from "@/components/text/GradientText";
+import { CompaniesAnimatedCarousel } from "@/components/shared/CompaniesAnimatedCarousel";
 
 const Landing: FC = () => {
   const { setUser } = useUserPhoto();
@@ -82,34 +84,15 @@ const Landing: FC = () => {
           target="_blank"
           rel="noopener noreferrer"
         >
-          <span className="bg-gradient-to-r from-blue-300 to-blue-950 bg-clip-text text-transparent">
-            Alexvarelo.raw
-          </span>
+          <GradientText>Alexvarelo.raw</GradientText>
         </a>
         <br className="mb-10" /> PHOTOS
       </motion.h1>
-      <motion.h1
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 1.3 }}
-      >
-        {/* <p className="my-4 max-w-4xl">
-          👋 I&apos;m a software engineer and one of my biggest passions is to
-          travel. 🛫
-          <br className="mb-1" />
-          📍 I&apos;m based on Spain, and my hometown is one of the best places
-          in earth 🌍 :{" "}
-          <span className="bg-gradient-to-r from-green-600 to-blue-300 bg-clip-text text-transparent font-extrabold">
-            Galicia
-          </span>
-          <br />
-          📷 One of the best things to travel for me is to carry my camera
-          everywhere, so I can create custom memories, that afterwards I like to
-          share.
-        </p> */}
-      </motion.h1>
 
       <AboutMeGrid images={photos?.slice(0, 4).map((x) => x.urls.regular)} />
+      <br />
+
+      <CompaniesAnimatedCarousel />
       <br />
       <h2 className="md:text-2xl text-xl font-bold my-4">Photos summary</h2>
       <div className="flex justify-center items-center gap-4 md:gap-2">
