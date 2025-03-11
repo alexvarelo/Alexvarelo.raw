@@ -62,7 +62,7 @@ export const AboutMeGrid: FC<IAboutMeProps> = ({ images }) => {
       },
     },
     hover: {
-      scale: 1.02,
+      scale: 1.01,
       transition: { duration: 0.2 },
     },
   };

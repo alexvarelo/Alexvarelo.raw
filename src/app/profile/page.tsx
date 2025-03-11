@@ -9,6 +9,7 @@ import { NumberTicker } from "@/components/shared/NumberTicker";
 import { useUserPhoto } from "@/contexts/UserPhotoContext";
 import { CompaniesAnimatedCarousel } from "@/components/shared/CompaniesAnimatedCarousel";
 import GradientText from "@/components/text/GradientText";
+import { StatsLineChart } from "@/components/charts/StatsLineChart";
 
 const Profile = () => {
   const [stats, setStats] = useState<Statistics>();
@@ -17,6 +18,49 @@ const Profile = () => {
   useEffect(() => {
     AvailableApis.fetchStats().then((result) => setStats(result));
   }, []);
+
+  const combineStats = () => {
+    if (
+      !stats?.downloads?.historical?.values ||
+      !stats?.views?.historical?.values
+    ) {
+      return [];
+    }
+
+    const downloadsData = stats.downloads.historical.values;
+    const viewsData = stats.views.historical.values;
+
+    // Create a map using date strings as keys for reliable lookup
+    const downloadsByDate: { [key: string]: number } = {};
+
+    downloadsData.forEach((item) => {
+      if (item.date) {
+        // Make sure we're using the date as a string
+        const dateString = String(item.date);
+        downloadsByDate[dateString] = item.value || 0;
+      }
+    });
+
+    // Build the combined array
+    const combinedStats: { views: number; downloads: number; date: Date }[] =
+      [];
+
+    viewsData.forEach((viewItem) => {
+      if (viewItem.date) {
+        // Make sure we're using the date as a string for lookup
+        const dateString = String(viewItem.date);
+        const downloads = downloadsByDate[dateString] || 0;
+
+        combinedStats.push({
+          views: viewItem.value || 0,
+          downloads: downloads,
+          date: new Date(viewItem.date),
+        });
+      }
+    });
+
+    return combinedStats;
+  };
 
   return (
     <>
@@ -98,6 +142,7 @@ const Profile = () => {
         </div>
       </div>
       <br />
+      {/* {stats && <StatsLineChart chartData={combineStats()} />} */}
       <br />
       <CompaniesAnimatedCarousel />
       {/* <OrbitingCircles iconSize={40}>
