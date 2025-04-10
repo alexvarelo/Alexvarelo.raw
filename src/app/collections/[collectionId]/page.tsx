@@ -68,7 +68,7 @@ const CollectionPage: React.FC<any> = ({ params }) => {
       </div>
 
       <div className="mt-5 text-center flex flex-wrap gap-y-2 justify-center">
-        {collectionInfo.tags.map((tag, indx) => (
+        {collectionInfo?.tags?.map((tag, indx) => (
           <Badge text={tag.title} key={indx} />
         ))}
       </div>
