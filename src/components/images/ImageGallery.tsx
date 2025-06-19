@@ -41,7 +41,7 @@ const ImageGallery = ({ photos, showPhotoStats = false, breakPoints }: ImageGall
             key={image.id}
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: false, amount: 0.2 }}
+            viewport={{ once: true, amount: 0.2 }}
             transition={{ duration: 0.5, delay: idx * 0.07, ease: "easeOut" }}
           >
             <ImageGridItem image={image} showPhotoStats={showPhotoStats} />

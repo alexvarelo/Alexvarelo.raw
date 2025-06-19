@@ -38,11 +38,11 @@ export default function RootLayout({
                         {children}
                       </div>
                     </div>
-                    <Footer />
                   </LayoutVisibility>
                   <LayoutVisibility showOnlyOn={["/collections/"]}>
                     {children}
                   </LayoutVisibility>
+                  <Footer />
                 </ImageNavigationProvider>
               </ClientThemeWrapper>
             </ThemeProvider>

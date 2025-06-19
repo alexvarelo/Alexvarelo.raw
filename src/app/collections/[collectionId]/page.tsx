@@ -13,10 +13,12 @@ import {
 } from "@/apis/generated/unsplashApi";
 import Link from "next/link";
 import { TextAnimate } from "@/components/magicui/text-animate";
+import { Blurhash } from "react-blurhash";
 
 const Page: React.FC<any> = ({ params }) => {
   const [pager, setPager] = useState<Pager>({ page: 1, resultsPerPage: 10 });
   const observerRef = useRef<HTMLDivElement>(null);
+  const [isLoaded, setIsLoaded] = useState(false);
 
   const { data: collectionInfo, isLoading: isLoadingCollection } =
     useGetCollection(params?.collectionId);
@@ -67,14 +69,21 @@ const Page: React.FC<any> = ({ params }) => {
     <div className="bg-white">
       {/* Hero Section */}
       <div className="relative w-full h-[75vh] overflow-hidden">
+        {/* Blurhash placeholder while image loads */}
+        {heroPhoto.blur_hash && !isLoaded && (
+          <div className="absolute inset-0 z-0">
+            <Blurhash hash={heroPhoto.blur_hash} width="100%" height="100%" />
+          </div>
+        )}
         <Image
           src={heroPhoto?.urls?.raw ?? ""}
           alt={collectionInfo.title ?? ""}
           blurDataURL={heroPhoto.blur_hash ? heroPhoto.blur_hash : undefined}
           placeholder={heroPhoto.blur_hash ? "blur" : "empty"}
           fill
-          className="object-cover w-full h-full"
+          className="object-cover w-full h-full z-10"
           priority
+          onLoad={() => setIsLoaded(true)}
         />
         {/* Bottom Blur and Overlay */}
         <div className="absolute bottom-0 left-0 w-full flex items-end min-h-[30vh] pointer-events-none">
