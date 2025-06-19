@@ -1,0 +1,647 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Unsplash API",
+    "version": "1.0.0",
+    "description": "Unsplash API specification for Alex Varelo's portfolio"
+  },
+  "servers": [
+    {
+      "url": "https://api.unsplash.com",
+      "description": "Unsplash API server"
+    }
+  ],
+  "components": {
+    "schemas": {
+      "Photo": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "created_at": { "type": "string", "format": "date-time" },
+          "updated_at": { "type": "string", "format": "date-time" },
+          "width": { "type": "integer" },
+          "height": { "type": "integer" },
+          "color": { "type": "string" },
+          "blur_hash": { "type": "string" },
+          "description": { "type": "string" },
+          "alt_description": { "type": "string" },
+          "urls": {
+            "type": "object",
+            "properties": {
+              "raw": { "type": "string" },
+              "full": { "type": "string" },
+              "regular": { "type": "string" },
+              "small": { "type": "string" },
+              "thumb": { "type": "string" }
+            }
+          },
+          "links": {
+            "type": "object",
+            "properties": {
+              "self": { "type": "string" },
+              "html": { "type": "string" },
+              "download": { "type": "string" }
+            }
+          },
+          "user": {
+            "type": "object",
+            "properties": {
+              "id": { "type": "string" },
+              "username": { "type": "string" },
+              "name": { "type": "string" },
+              "total_photos": { "type": "integer" },
+              "total_collections": { "type": "integer" },
+              "profile_image": {
+                "type": "object",
+                "properties": {
+                  "small": { "type": "string" },
+                  "medium": { "type": "string" },
+                  "large": { "type": "string" }
+                }
+              }
+            }
+          },
+          "exif": {
+            "type": "object",
+            "properties": {
+              "make": { "type": "string" },
+              "model": { "type": "string" },
+              "aperture": { "type": "string" },
+              "focal_length": { "type": "string" },
+              "exposure_time": { "type": "string" },
+              "iso": { "type": "integer" }
+            }
+          },
+          "location": {
+            "type": "object",
+            "properties": {
+              "name": { "type": "string" }
+            }
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "title": { "type": "string" }
+              }
+            }
+          }
+        }
+      },
+      "Statistics": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "username": { "type": "string" },
+          "downloads": { "$ref": "#/components/schemas/Metrics" },
+          "views": { "$ref": "#/components/schemas/Metrics" }
+        }
+      },
+      "Metrics": {
+        "type": "object",
+        "properties": {
+          "total": { "type": "integer" },
+          "historical": { "$ref": "#/components/schemas/HistoricalMetrics" }
+        }
+      },
+      "HistoricalMetrics": {
+        "type": "object",
+        "properties": {
+          "change": { "type": "number" },
+          "average": { "type": "number" },
+          "resolution": { "type": "string" },
+          "quantity": { "type": "integer" },
+          "values": {
+            "type": "array",
+            "items": { "$ref": "#/components/schemas/DataPoints" }
+          }
+        }
+      },
+      "DataPoints": {
+        "type": "object",
+        "properties": {
+          "date": { "type": "string", "format": "date-time" },
+          "value": { "type": "number" }
+        }
+      },
+      "Collection": {
+        "type": "object",
+        "required": [
+          "id",
+          "title",
+          "description",
+          "published_at",
+          "last_collected_at",
+          "updated_at",
+          "featured",
+          "total_photos",
+          "private",
+          "share_key",
+          "tags",
+          "links",
+          "user",
+          "cover_photo",
+          "preview_photos"
+        ],
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "published_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "last_collected_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updated_at": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "featured": {
+            "type": "boolean"
+          },
+          "total_photos": {
+            "type": "integer"
+          },
+          "private": {
+            "type": "boolean"
+          },
+          "share_key": {
+            "type": "string"
+          },
+          "tags": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Tag"
+            }
+          },
+          "links": {
+            "$ref": "#/components/schemas/Links"
+          },
+          "user": {
+            "$ref": "#/components/schemas/User"
+          },
+          "cover_photo": {
+            "$ref": "#/components/schemas/Photo"
+          },
+          "preview_photos": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/Photo"
+            }
+          }
+        }
+      },
+      "Tag": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "type": "string"
+          },
+          "title": {
+            "type": "string"
+          },
+          "source": {
+            "$ref": "#/components/schemas/Source"
+          }
+        }
+      },
+      "Source": {
+        "type": "object",
+        "properties": {
+          "ancestry": {
+            "$ref": "#/components/schemas/Ancestry"
+          },
+          "title": {
+            "type": "string"
+          },
+          "subtitle": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string"
+          },
+          "meta_title": {
+            "type": "string"
+          },
+          "meta_description": {
+            "type": "string"
+          },
+          "cover_photo": {
+            "$ref": "#/components/schemas/Photo"
+          }
+        }
+      },
+      "Ancestry": {
+        "type": "object",
+        "properties": {
+          "type": {
+            "$ref": "#/components/schemas/Tag"
+          },
+          "category": {
+            "$ref": "#/components/schemas/Tag"
+          },
+          "subcategory": {
+            "$ref": "#/components/schemas/Tag"
+          }
+        }
+      },
+      "Links": {
+        "type": "object",
+        "properties": {
+          "self": {
+            "type": "string"
+          },
+          "html": {
+            "type": "string"
+          },
+          "photos": {
+            "type": "string"
+          },
+          "related": {
+            "type": "string"
+          }
+        }
+      },
+      "ImageStats": {
+        "type": "object",
+        "properties": {
+          "views": {
+            "type": "object",
+            "properties": {
+              "total": { "type": "integer" }
+            }
+          },
+          "downloads": {
+            "type": "object",
+            "properties": {
+              "total": { "type": "integer" }
+            }
+          }
+        }
+      },
+      "User": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "updated_at": { "type": "string" },
+          "username": { "type": "string" },
+          "name": { "type": "string" },
+          "first_name": { "type": "string" },
+          "last_name": { "type": "string" },
+          "twitter_username": { "type": "string", "nullable": true },
+          "portfolio_url": { "type": "string", "nullable": true },
+          "bio": { "type": "string", "nullable": true },
+          "location": { "type": "string", "nullable": true },
+          "links": { "$ref": "#/components/schemas/UserLinks" },
+          "profile_image": { "$ref": "#/components/schemas/ProfileImage" },
+          "instagram_username": { "type": "string", "nullable": true },
+          "total_collections": { "type": "integer" },
+          "total_likes": { "type": "integer" },
+          "total_photos": { "type": "integer" },
+          "total_promoted_photos": { "type": "integer" },
+          "total_illustrations": { "type": "integer" },
+          "total_promoted_illustrations": { "type": "integer" },
+          "accepted_tos": { "type": "boolean" },
+          "for_hire": { "type": "boolean" },
+          "social": { "$ref": "#/components/schemas/Social" }
+        }
+      }
+    }
+  },
+  "paths": {
+    "/users/{username}/statistics": {
+      "get": {
+        "summary": "Get user statistics",
+        "operationId": "getUserStatistics",
+        "parameters": [
+          {
+            "name": "username",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User statistics",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Statistics" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/{username}/photos": {
+      "get": {
+        "summary": "Get user photos",
+        "operationId": "getUserPhotos",
+        "parameters": [
+          {
+            "name": "username",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "schema": { "type": "integer", "default": 1 }
+          },
+          {
+            "name": "per_page",
+            "in": "query",
+            "schema": { "type": "integer", "default": 10 }
+          },
+          {
+            "name": "order_by",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": ["latest", "oldest", "popular"]
+            }
+          },
+          {
+            "name": "orientation",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": ["landscape", "portrait", "squarish"]
+            }
+          },
+          {
+            "name": "stats",
+            "in": "query",
+            "schema": { "type": "boolean" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of user photos",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/Photo" }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/{username}": {
+      "get": {
+        "summary": "Get user profile",
+        "operationId": "getUserProfile",
+        "parameters": [
+          {
+            "name": "username",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "User profile",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/User" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/users/{username}/collections": {
+      "get": {
+        "operationId": "getUserCollections",
+        "summary": "Get user collections",
+        "parameters": [
+          {
+            "name": "username",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 1
+            }
+          },
+          {
+            "name": "per_page",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer",
+              "default": 10
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "List of collections",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/Collection"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/collections/{collectionId}/photos": {
+      "get": {
+        "summary": "Get photos in a collection",
+        "operationId": "getCollectionPhotos",
+        "parameters": [
+          {
+            "name": "collectionId",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "schema": { "type": "integer", "default": 1 }
+          },
+          {
+            "name": "per_page",
+            "in": "query",
+            "schema": { "type": "integer", "default": 10 }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Photos in collection",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/Photo" }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/collections/{collectionId}": {
+      "get": {
+        "summary": "Get collection details",
+        "operationId": "getCollection",
+        "parameters": [
+          {
+            "name": "collectionId",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Collection details",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Collection" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/photos/{photoId}": {
+      "get": {
+        "summary": "Get photo details",
+        "operationId": "getPhotoDetails",
+        "parameters": [
+          {
+            "name": "photoId",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Photo details",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/Photo" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/photos/{photoId}/download": {
+      "get": {
+        "summary": "Get photo download link",
+        "operationId": "downloadPhoto",
+        "parameters": [
+          {
+            "name": "photoId",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Photo download link",
+            "content": {
+              "application/json": {
+                "schema": { "type": "object" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/photos/{photoId}/statistics": {
+      "get": {
+        "summary": "Get photo statistics",
+        "operationId": "photoStatistics",
+        "parameters": [
+          {
+            "name": "photoId",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Photo statistics",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/ImageStats" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/search/photos": {
+      "get": {
+        "summary": "Search photos",
+        "operationId": "searchPhoto",
+        "parameters": [
+          {
+            "name": "query",
+            "in": "query",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "schema": { "type": "integer", "default": 1 }
+          },
+          {
+            "name": "per_page",
+            "in": "query",
+            "schema": { "type": "integer", "default": 10 }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Search results",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

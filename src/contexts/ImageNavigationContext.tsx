@@ -1,4 +1,5 @@
 "use client";
+import { Photo } from "@/apis/generated/model";
 import { createContext, useContext, ReactNode, useState } from "react";
 
 type ImageNavigation = {

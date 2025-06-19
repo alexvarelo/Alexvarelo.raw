@@ -1,9 +1,8 @@
-import { Statistics } from "@/models/Statistics";
+import { ImageStats, Statistics } from "@/apis/generated/model";
 import axios from "axios";
-import { convertToStatistics } from "./helpers/DataMapping";
-import { Pager } from "@/models/Pagination";
 import { APP_CONFIG } from "@/constants/app";
 import { useQuery } from "react-query";
+import { Collection } from "@/apis/generated/model";
 
 export const UNSPLASH_USERNAME = APP_CONFIG.unsplash.username;
 
@@ -26,7 +25,7 @@ const fetchStats = async (): Promise<Statistics> => {
       headers: HEADERS,
     }
   );
-  return convertToStatistics(result.data);
+  return result.data;
 };
 
 export const useFetchStats = () => {
@@ -57,7 +56,7 @@ const fetchUserPhotos = async (
   return result.data;
 };
 
-const fetchUserProfile = async () => {
+const fetchUserProfile = async ():Promise<User> => {
   const result = await axios.get(
     `https://api.unsplash.com/users/${UNSPLASH_USERNAME}`,
     {
@@ -67,7 +66,7 @@ const fetchUserProfile = async () => {
   return result.data;
 };
 
-const fetchUserCollections = async () => {
+const fetchUserCollections = async () : Promise<Collection[]> => {
   const result = await axios.get(
     `https://api.unsplash.com/users/${UNSPLASH_USERNAME}/collections`,
     {
@@ -77,7 +76,7 @@ const fetchUserCollections = async () => {
   return result.data;
 };
 
-const fetchCollectionPhotos = async (collectionId: string, page: Pager) => {
+const fetchCollectionPhotos = async (collectionId: string, page: { page: number; resultsPerPage: number }): Promise<Photo[]> => {
   const result = await axios.get(
     `https://api.unsplash.com/collections/${collectionId}/photos?page=${page.page}&per_page=${page.resultsPerPage}`,
     {
@@ -87,7 +86,7 @@ const fetchCollectionPhotos = async (collectionId: string, page: Pager) => {
   return result.data;
 };
 
-const fetchCollection = async (collectionId: string) => {
+const fetchCollection = async (collectionId: string) : Promise<Collection> => {
   const result = await axios.get(
     `https://api.unsplash.com/collections/${collectionId}`,
     {
@@ -97,7 +96,7 @@ const fetchCollection = async (collectionId: string) => {
   return result.data;
 };
 
-const getPhotoDetails = async (photoId: string) => {
+const getPhotoDetails = async (photoId: string) : Promise<Photo> => {
   const result = await axios.get(`https://api.unsplash.com/photos/${photoId}`, {
     headers: HEADERS,
   });
@@ -114,7 +113,7 @@ const downloadPhoto = async (photoId: string) => {
   return result.data;
 };
 
-const photoStatistics = async (photoId: string) => {
+const photoStatistics = async (photoId: string) : Promise<ImageStats> => {
   const result = await axios.get(
     `https://api.unsplash.com/photos/${photoId}/statistics`,
     {
@@ -124,7 +123,7 @@ const photoStatistics = async (photoId: string) => {
   return result.data;
 };
 
-const searchPhoto = async (query: string) => {
+const searchPhoto = async (query: string) : Promise<Photo[]> => {
   const result = await axios.get(
     `https://api.unsplash.com/search/photos?query=${query}`,
     {
@@ -134,7 +133,7 @@ const searchPhoto = async (query: string) => {
   return result.data;
 };
 
-const userStatistics = async () => {
+const userStatistics = async (): Promise<Statistics | null> => {
   try {
     const response = await fetch(
       `https://api.unsplash.com/users/${UNSPLASH_USERNAME}/statistics`,
@@ -151,7 +150,7 @@ const userStatistics = async () => {
   }
 };
 
-const userPhotos = async () => {
+const userPhotos = async (): Promise<Photo[] | null> => {
   try {
     const response = await fetch(
       `https://api.unsplash.com/users/${UNSPLASH_USERNAME}/photos`,

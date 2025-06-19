@@ -1,4 +1,6 @@
 "use client";
+import { useGetUserStatistics } from "@/apis/generated/unsplashApi";
+import { APP_CONFIG } from "@/constants/app";
 import { AvailableApis } from "@/apis/apis";
 import LoadingIndicator from "@/components/loading/LoadingIndicator";
 import { Statistics } from "@/models/Statistics";
@@ -12,55 +14,11 @@ import GradientText from "@/components/text/GradientText";
 import { StatsLineChart } from "@/components/charts/StatsLineChart";
 
 const Profile = () => {
-  const [stats, setStats] = useState<Statistics>();
+  const { data: stats } = useGetUserStatistics(APP_CONFIG.unsplash.username);
   const { user } = useUserPhoto();
 
-  useEffect(() => {
-    AvailableApis.fetchStats().then((result) => setStats(result));
-  }, []);
-
-  const combineStats = () => {
-    if (
-      !stats?.downloads?.historical?.values ||
-      !stats?.views?.historical?.values
-    ) {
-      return [];
-    }
-
-    const downloadsData = stats.downloads.historical.values;
-    const viewsData = stats.views.historical.values;
-
-    // Create a map using date strings as keys for reliable lookup
-    const downloadsByDate: { [key: string]: number } = {};
-
-    downloadsData.forEach((item) => {
-      if (item.date) {
-        // Make sure we're using the date as a string
-        const dateString = String(item.date);
-        downloadsByDate[dateString] = item.value || 0;
-      }
-    });
-
-    // Build the combined array
-    const combinedStats: { views: number; downloads: number; date: Date }[] =
-      [];
-
-    viewsData.forEach((viewItem) => {
-      if (viewItem.date) {
-        // Make sure we're using the date as a string for lookup
-        const dateString = String(viewItem.date);
-        const downloads = downloadsByDate[dateString] || 0;
-
-        combinedStats.push({
-          views: viewItem.value || 0,
-          downloads: downloads,
-          date: new Date(viewItem.date),
-        });
-      }
-    });
-
-    return combinedStats;
-  };
+  const totalViews = stats?.views?.total || 0;
+  const totalDownloads = stats?.downloads?.total || 0;
 
   return (
     <>
@@ -90,12 +48,12 @@ const Profile = () => {
           <div className="stat-value text-primary">
             <div className="stat-value text-red-400">
               <LoadingIndicator isLoading={Checks.isNil(stats)}>
-                <NumberTicker value={stats?.views.total as number} />
+                <NumberTicker value={totalViews} />
               </LoadingIndicator>
             </div>
           </div>
           <div className="stat-desc">
-            {stats?.views.historical.average} average per day
+            {stats?.views?.historical?.average?.toLocaleString?.() ?? 0} average per day
           </div>
         </div>
 
@@ -118,12 +76,11 @@ const Profile = () => {
           <div className="stat-title">Total downloads</div>
           <div className="stat-value text-blue-600">
             <LoadingIndicator isLoading={Checks.isNil(stats)}>
-              <NumberTicker value={stats?.downloads.total as number} />
+              <NumberTicker value={totalDownloads} />
             </LoadingIndicator>
           </div>
           <div className="stat-desc">
-            {stats?.downloads.historical.average.toLocaleString()} average per
-            day
+            {stats?.downloads?.historical?.average?.toLocaleString?.() ?? 0} average per day
           </div>
         </div>
 
@@ -145,13 +102,6 @@ const Profile = () => {
       {/* {stats && <StatsLineChart chartData={combineStats()} />} */}
       <br />
       <CompaniesAnimatedCarousel />
-      {/* <OrbitingCircles iconSize={40}>
-          <Icons.figma />
-          <Icons.buzzfeed />
-          <Icons.googleSlides />
-          <Icons.medium />
-          <Icons.gitHub />
-        </OrbitingCircles> */}
 
       <br />
       <PopularPhotos />

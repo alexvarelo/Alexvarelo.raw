@@ -1,47 +1,52 @@
 import { useState, useEffect, FC, useRef, useMemo } from "react";
-import { AvailableApis } from "../../apis/apis";
-import { Pager } from "@/models/Pagination";
 import StatsContainer from "@/components/StatsContainer";
 import LoadingIndicator from "@/components/loading/LoadingIndicator";
 import { motion } from "framer-motion";
 import ImageGallery from "@/components/images/ImageGallery";
 import { useUserPhoto } from "@/contexts/UserPhotoContext";
-import { useUserPhotos } from "@/apis/user/UserPhotosApi";
 import { AboutMeGrid } from "@/components/landing/AboutMeGrid";
 import GradientText from "@/components/text/GradientText";
 import { CompaniesAnimatedCarousel } from "@/components/shared/CompaniesAnimatedCarousel";
+import { APP_CONFIG } from "@/constants/app";
+import { Pager } from "@/models/Pagination";
+import { useGetUserPhotos, useGetUserProfile } from "@/apis/generated/unsplashApi";
 
 const Landing: FC = () => {
+  const [pager, setPager] = useState<Pager>({
+    page: 1,
+    resultsPerPage: 12,
+  });
   const { setUser } = useUserPhoto();
   const observerRef = useRef<HTMLDivElement>(null);
 
-  const {
-    data: photosResponse,
-    isLoading,
-    isFetchingNextPage,
-    hasNextPage,
-    fetchNextPage,
-  } = useUserPhotos(
+  const { data: newPhotos = [], isLoading } = useGetUserPhotos(
+    APP_CONFIG.unsplash.username,
     {
-      currentPage: 1,
-      resultsPerPage: 12,
-      orderBy: "popular",
+      page: pager.page,
+      per_page: pager.resultsPerPage,
+      order_by: "popular",
     },
     {
-      getNextPageParam: (
-        lastPage: { user: { total_photos: any } }[],
-        allPages: string | any[]
-      ) => {
-        const totalPhotos = lastPage[0]?.user?.total_photos;
-        const nextPage = allPages.length + 1;
-        return nextPage * 12 < totalPhotos ? nextPage : undefined;
+      query: {
+        keepPreviousData: true,
       },
     }
   );
 
-  const photos = useMemo(() => {
-    return photosResponse?.pages?.flat() ?? [];
-  }, [photosResponse]);
+  const { data: userProfile } = useGetUserProfile(APP_CONFIG.unsplash.username);
+
+  const [photos, setPhotos] = useState<any[]>([]);
+
+  useEffect(() => {
+    if (pager.page === 1) {
+      setPhotos(newPhotos);
+    } else if (newPhotos.length > 0) {
+      setPhotos((prev) => [...prev, ...newPhotos]);
+    }
+  }, [newPhotos, pager.page]);
+
+  const hasNextPage =
+    pager.page * pager.resultsPerPage < (userProfile?.total_photos ?? 0);
 
   useEffect(() => {
     const node = observerRef.current;
@@ -50,8 +55,7 @@ const Landing: FC = () => {
     const observer = new IntersectionObserver(
       (entries) => {
         if (entries[0].isIntersecting) {
-          fetchNextPage();
-          //setPager({ ...pager, page: pager.page + 1 });
+          setPager((prev) => ({ ...prev, page: prev.page + 1 }));
         }
       },
       { threshold: 0.5 }
@@ -61,15 +65,23 @@ const Landing: FC = () => {
     return () => {
       observer.disconnect();
     };
-  }, [hasNextPage, isLoading, photos]);
+  }, [hasNextPage, isLoading, pager]);
 
-  const totalCustomerPhotos = photos?.[0]?.user?.total_photos;
-  const profileImage = photos?.[0]?.user?.profile_image?.large;
+  useEffect(() => {
+    if (userProfile) {
+      setUser(userProfile as User);
+    }
+  }, [userProfile, setUser]);
+
+  const totalCustomerPhotos = userProfile?.total_photos;
+  const profileImage = userProfile?.profile_image?.large;
+
+  console.log("user profile", userProfile);
 
   return (
     <div>
       <div className="avatar">
-        <div className="ring-primary ring-offset-base-100 md:w-44 w-24 rounded-full">
+        <div className="ring-primary ring-offset-base-100 w-16 md:w-24 rounded-full">
           <img src={profileImage} />
         </div>
       </div>
@@ -84,12 +96,21 @@ const Landing: FC = () => {
           target="_blank"
           rel="noopener noreferrer"
         >
-          <GradientText>Alexvarelo.raw</GradientText>
+          <GradientText>{APP_CONFIG.title}</GradientText>
         </a>
         <br className="mb-10" /> PHOTOS
       </motion.h1>
 
-      <AboutMeGrid images={photos?.slice(0, 4).map((x) => x.urls.regular)} />
+      <AboutMeGrid
+        images={
+          photos
+            ? photos
+                .slice(0, 4)
+                .map((x) => x?.urls?.regular)
+                .filter((url): url is string => typeof url === "string")
+            : []
+        }
+      />
       <br />
 
       <CompaniesAnimatedCarousel />
@@ -98,13 +119,13 @@ const Landing: FC = () => {
       <div className="flex justify-center items-center gap-4 md:gap-2">
         <StatsContainer
           title={"Photos"}
-          stat={totalCustomerPhotos}
-          additionalItem={`Promoted photos: ${photos?.[0]?.user?.total_promoted_photos}`}
+          stat={totalCustomerPhotos ?? 0}
+          additionalItem={`Promoted photos: ${userProfile?.total_promoted_photos ?? 0}`}  
         />
         <StatsContainer
           title={"Collections"}
-          stat={photos?.[0]?.user?.total_collections}
-          additionalItem={`Promoted collections: ${photos?.[0]?.user?.total_promoted_illustrations}`}
+          stat={userProfile?.total_collections ?? 0}
+          additionalItem={`Promoted collections: ${userProfile?.total_promoted_illustrations}`}
         />
       </div>
       <br />
@@ -114,7 +135,7 @@ const Landing: FC = () => {
           Showing {photos.length} photos from {totalCustomerPhotos}
         </p>
       </div>
-      {isLoading && !isFetchingNextPage ? (
+      {isLoading ? (
         <div className="flex justify-center items-center h-full">
           <LoadingIndicator isLoading={true} loadingSize="lg" />
         </div>
@@ -126,11 +147,6 @@ const Landing: FC = () => {
           className="pt-10"
         >
           <ImageGallery photos={photos} showPhotoStats={true} />
-          {isFetchingNextPage && (
-            <div className="flex justify-center items-center h-full mb-96">
-              <LoadingIndicator isLoading={true} loadingSize="lg" />
-            </div>
-          )}
           {hasNextPage && <div ref={observerRef} className="h-10 w-full" />}
         </motion.div>
       )}

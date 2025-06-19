@@ -46,7 +46,7 @@ export const StatsLineChart: React.FC<ILineChartProps> = ({ chartData }) => {
       views: chartData.reduce((acc, curr) => acc + curr.views, 0),
       downloads: chartData.reduce((acc, curr) => acc + curr.downloads, 0),
     }),
-    []
+    [chartData]
   );
 
   return (
