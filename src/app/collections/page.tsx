@@ -272,7 +272,7 @@ const Collections = () => {
         </section>
 
         {/* CTA Section */}
-        <motion.section
+        {/* <motion.section
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 1.5, duration: 1 }}
@@ -293,7 +293,7 @@ const Collections = () => {
               Get in touch
             </button>
           </div>
-        </motion.section>
+        </motion.section> */}
       </main>
     </div>
   );
