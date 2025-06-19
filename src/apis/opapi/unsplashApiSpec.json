@@ -315,6 +315,35 @@
           "for_hire": { "type": "boolean" },
           "social": { "$ref": "#/components/schemas/Social" }
         }
+      },
+      "UserLinks": {
+        "type": "object",
+        "properties": {
+          "self": { "type": "string" },
+          "html": { "type": "string" },
+          "photos": { "type": "string" },
+          "likes": { "type": "string" },
+          "portfolio": { "type": "string" },
+          "following": { "type": "string" },
+          "followers": { "type": "string" }
+        }
+      },
+      "ProfileImage": {
+        "type": "object",
+        "properties": {
+          "small": { "type": "string" },
+          "medium": { "type": "string" },
+          "large": { "type": "string" }
+        }
+      },
+      "Social": {
+        "type": "object",
+        "properties": {
+          "instagram_username": { "type": "string", "nullable": true },
+          "portfolio_url": { "type": "string", "nullable": true },
+          "twitter_username": { "type": "string", "nullable": true },
+          "paypal_email": { "type": "string", "nullable": true }
+        }
       }
     }
   },
