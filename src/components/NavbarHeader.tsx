@@ -6,7 +6,7 @@ import ThemeIndicator from "./ThemeIndicator";
 
 const NavbarHeader = () => {
   return (
-    <div className="navbar bg-base-100 py-4 pr-7">
+    <div className="navbar bg-base-100 py-4 pr-7 relative">
       <div className="navbar-start">
         <div className="dropdown">
           <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
@@ -44,12 +44,12 @@ const NavbarHeader = () => {
           </ul>
         </div>
       </div>
-      <div className="navbar-center">
-        <a className="btn btn-ghost text-xl" href="/">
-          <div className="ring-primary w-10 rounded-full">
-            <img src={"/ProfileAvatar.png"} />
+      <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 lg:static lg:translate-x-0 lg:translate-y-0 lg:navbar-center">
+        <Link className="btn btn-ghost text-xl flex items-center justify-center p-0" href="/">
+          <div className="ring-primary w-10 h-10 rounded-full overflow-hidden flex items-center justify-center">
+            <img src={"/ProfileAvatar.png"} alt="Profile" className="rounded-full w-full h-full object-cover" />
           </div>
-        </a>
+        </Link>
       </div>
       <div className="navbar-center hidden lg:flex">
         <ul className="menu menu-horizontal px-1">

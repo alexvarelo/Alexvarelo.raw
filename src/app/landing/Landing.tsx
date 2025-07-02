@@ -73,16 +73,13 @@ const Landing: FC = () => {
     }
   }, [userProfile, setUser]);
 
-  const totalCustomerPhotos = userProfile?.total_photos;
-  const profileImage = userProfile?.profile_image?.large;
-
   console.log("user profile", userProfile);
 
   return (
     <div>
       <div className="avatar">
         <div className="ring-primary ring-offset-base-100 w-16 md:w-24 rounded-full">
-          <img src={profileImage} />
+          <img src={userProfile?.profile_image?.large} />
         </div>
       </div>
       <motion.h1
@@ -115,11 +112,11 @@ const Landing: FC = () => {
 
       <CompaniesAnimatedCarousel />
       <br />
-      <h2 className="md:text-2xl text-xl font-bold my-4">Photos summary</h2>
+      {/* <h2 className="md:text-2xl text-xl font-bold my-4">Photos summary</h2>
       <div className="flex justify-center items-center gap-4 md:gap-2">
         <StatsContainer
           title={"Photos"}
-          stat={totalCustomerPhotos ?? 0}
+          stat={userProfile?.total_photos ?? 0}
           additionalItem={`Promoted photos: ${userProfile?.total_promoted_photos ?? 0}`}  
         />
         <StatsContainer
@@ -128,11 +125,11 @@ const Landing: FC = () => {
           additionalItem={`Promoted collections: ${userProfile?.total_promoted_illustrations}`}
         />
       </div>
-      <br />
+      <br /> */}
       <h1 className="md:text-2xl text-xl font-bold mb-2">My popular gallery</h1>
       <div className="text-xs text-gray-500">
         <p>
-          Showing {photos.length} photos from {totalCustomerPhotos}
+          Showing {photos.length} photos from {userProfile?.total_photos}
         </p>
       </div>
       {isLoading ? (

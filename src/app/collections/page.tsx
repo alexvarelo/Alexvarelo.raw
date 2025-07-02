@@ -105,6 +105,7 @@ const Collections = () => {
               animation="blurInUp"
               by="character"
               duration={0.8}
+              startOnView={false}
               className="text-4xl md:text-5xl lg:text-7xl mb-4 md:mb-8 font-semibold mt-4 md:mt-5 tracking-tight"
             >
               Browse my work
