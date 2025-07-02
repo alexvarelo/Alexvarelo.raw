@@ -6,4 +6,4 @@ export const APP_CONFIG = {
   unsplash: {
     username: 'alexvarelo'
   }
-} as const; 
+}; 

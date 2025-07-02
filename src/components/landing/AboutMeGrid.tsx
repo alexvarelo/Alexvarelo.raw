@@ -93,10 +93,8 @@ export const AboutMeGrid: FC<IAboutMeProps> = ({ images }) => {
               <span className="bg-gradient-to-r from-green-600 to-blue-300 bg-clip-text text-transparent font-extrabold">
                 Galicia
               </span>
-              <br />
-              One of the best things to travel for me is to carry my camera
-              everywhere, so I can create custom memories, that afterwards I
-              like to share.
+              <br />I always carry my camera everywhere, so I can create custom
+              memories which you can see in this website.
             </p>
           </Card>
         </motion.div>

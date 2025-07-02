@@ -13,7 +13,7 @@ const PopularPhotos: FunctionComponent<PopularPhotosProps> = () => {
       setPhotos(result);
       setUser(result[0].user);
     });
-  }, []);
+  }, [setUser]);
   return (
     <div className="carousel rounded-box mt-5">
       {photos?.map((photo) => (

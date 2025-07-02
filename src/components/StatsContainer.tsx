@@ -14,6 +14,7 @@ const StatsContainer: FunctionComponent<StatsContainerProps> = ({
   stat,
   additionalItem,
 }) => {
+  console.log("stat", stat);
   return (
     <div className="stats shadow" style={{ overflow: "hidden" }}>
       <div className="stat">

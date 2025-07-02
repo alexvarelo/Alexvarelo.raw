@@ -1,23 +1,24 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { motion } from "framer-motion";
-import { AvailableApis } from "@/apis/apis";
-import { ImageStats } from "@/models/Statistics";
-import Image from "next/image";
-import { FaApple, FaCamera, FaClock, FaRuler, FaSun } from "react-icons/fa";
-import { RiNumbersLine } from "react-icons/ri";
-import { BsDownload, BsEye, BsTag } from "react-icons/bs";
-import { PhotoDetails } from "@/models/PhotoDetails";
-import { NumberTicker } from "@/components/shared/NumberTicker";
-import { Badge } from "@/components/shared/Badge";
-import { Blurhash } from "react-blurhash";
-import { cn } from "@/lib/utils";
+import React from "react";
 import { useRouter } from "next/navigation";
+import { motion } from "framer-motion";
+import Image from "next/image";
 import { useImageNavigation } from "@/contexts/ImageNavigationContext";
 import ImageDetailSkeleton from "@/components/skeletons/ImageDetailSkeleton";
 import { ImageNavigationButtons } from "@/components/shared/ImageNavigationButtons";
 import { DownloadButton } from "@/components/shared/DownloadButton";
+import { NumberTicker } from "@/components/shared/NumberTicker";
+import { Badge } from "@/components/shared/Badge";
+import { Blurhash } from "react-blurhash";
+import { cn } from "@/lib/utils";
+import { FaApple, FaCamera, FaClock, FaRuler, FaSun } from "react-icons/fa";
+import { RiNumbersLine } from "react-icons/ri";
+import { BsDownload, BsEye, BsTag } from "react-icons/bs";
+import {
+  useGetPhotoDetails,
+  usePhotoStatistics,
+} from "@/apis/generated/unsplashApi";
 
 interface PageProps {
   params: { imageId: string };
@@ -25,32 +26,14 @@ interface PageProps {
 
 const ImageDetail: React.FC<PageProps> = ({ params }) => {
   const router = useRouter();
-  const [photo, setPhoto] = useState<PhotoDetails | null>(null);
-  const [photoStats, setPhotoStats] = useState<ImageStats | null>(null);
-  const [isLoaded, setIsLoaded] = useState(false);
   const { navigation } = useImageNavigation();
-
   const nextImageId = navigation.nextImage[params.imageId];
   const prevImageId = navigation.prevImage[params.imageId];
 
-  useEffect(() => {
-    const fetchImageData = async () => {
-      const result = await AvailableApis.getPhotoDetails(params.imageId);
-      if (result) {
-        setPhoto(result);
-      }
-    };
+  const { data: photo, isLoading: isLoadingPhoto } = useGetPhotoDetails(params.imageId);
+  const { data: photoStats, isLoading: isLoadingStats } = usePhotoStatistics(params.imageId);
 
-    const fetchImageStats = async () => {
-      const result = await AvailableApis.photoStatistics(params.imageId);
-      if (result) {
-        setPhotoStats(result);
-      }
-    };
-
-    fetchImageData();
-    fetchImageStats();
-  }, [params]);
+  const [isLoaded, setIsLoaded] = React.useState(false);
 
   const handleNavigation = (direction: "next" | "prev") => {
     const imageId = direction === "next" ? nextImageId : prevImageId;
@@ -59,11 +42,10 @@ const ImageDetail: React.FC<PageProps> = ({ params }) => {
     }
   };
 
-  if (!photo) return <ImageDetailSkeleton isVertical={false} />;
+  if (isLoadingPhoto || !photo) return <ImageDetailSkeleton isVertical={false} />;
 
   const highlightClass = "text-gold font-bold";
-
-  const imageIsVertical = photo.height > photo.width;
+  const imageIsVertical = (photo.height ?? 0) > (photo.width ?? 0);
 
   return (
     <div className="p-4 md:p-6 relative">
@@ -86,8 +68,8 @@ const ImageDetail: React.FC<PageProps> = ({ params }) => {
             )}
             <div className="relative w-full h-full">
               <Image
-                src={photo.urls.raw}
-                alt={photo.alt_description as string}
+                src={photo.urls?.raw ?? ""}
+                alt={photo.alt_description ?? ""}
                 className="object-cover"
                 priority
                 fill
@@ -113,7 +95,7 @@ const ImageDetail: React.FC<PageProps> = ({ params }) => {
                   nextDisabled={!nextImageId}
                 />
                 <DownloadButton
-                  url={photo.urls.raw}
+                  url={photo.urls?.raw ?? ""}
                   filename={`${photo.id}.jpg`}
                 />
               </div>
@@ -126,7 +108,7 @@ const ImageDetail: React.FC<PageProps> = ({ params }) => {
                 <FaCamera />
               )}
               <span>
-                {photo.exif.make} {photo.exif.model}
+                {photo.exif?.make ?? ""} {photo.exif?.model ?? ""}
               </span>
             </div>
             <div className="flex flex-row justify-between">
@@ -138,26 +120,26 @@ const ImageDetail: React.FC<PageProps> = ({ params }) => {
                   </li>
                   <li className="flex items-center space-x-2">
                     <BsTag className="text-gray-500" />
-                    <span>{photo.location?.name}</span>
+                    <span>{photo.location?.name ?? ""}</span>
                   </li>
                   <li className="flex items-center space-x-2">
                     <FaCamera className="text-gray-500" />
-                    <span>{photo.exif.aperture}</span>
+                    <span>{photo.exif?.aperture ?? ""}</span>
                   </li>
                   <li className="flex items-center space-x-2">
                     <FaRuler className="text-gray-500" />
-                    <span>{photo.exif.focal_length}</span>
+                    <span>{photo.exif?.focal_length ?? ""}</span>
                   </li>
                   <li className="flex items-center space-x-2">
                     <FaClock className="text-gray-500" />
-                    <span>{photo.exif.exposure_time}</span>
+                    <span>{photo.exif?.exposure_time ?? ""}</span>
                   </li>
                   <li className="flex items-center space-x-2">
                     <FaSun className="text-gray-500" />
-                    <span>{photo.exif.iso}</span>
+                    <span>{photo.exif?.iso ?? ""}</span>
                   </li>
                   <li className="text-xs md:text-sm text-gray-500 mt-2 md:mt-4">
-                    {new Date(photo.created_at).toLocaleDateString()}
+                    {photo.created_at ? new Date(photo.created_at).toLocaleDateString() : ""}
                   </li>
                 </ul>
               </div>
@@ -172,9 +154,9 @@ const ImageDetail: React.FC<PageProps> = ({ params }) => {
                       <BsEye className="text-gray-500" />
                       <span>
                         <NumberTicker
-                          value={photoStats.views.total}
+                          value={photoStats.views?.total ?? 0}
                           cssWrapper={
-                            photoStats.views.total > 100000
+                            (photoStats.views?.total ?? 0) > 100000
                               ? highlightClass
                               : ""
                           }
@@ -187,7 +169,7 @@ const ImageDetail: React.FC<PageProps> = ({ params }) => {
                         <NumberTicker
                           value={photoStats?.downloads?.total ?? 0}
                           cssWrapper={
-                            photoStats.downloads.total > 10000
+                            (photoStats.downloads?.total ?? 0) > 10000
                               ? highlightClass
                               : ""
                           }
@@ -204,8 +186,8 @@ const ImageDetail: React.FC<PageProps> = ({ params }) => {
                 Tags
               </h3>
               <div className="flex flex-wrap gap-2">
-                {photo.tags.map((tag, indx) => (
-                  <Badge key={indx} text={tag.title} />
+                {(photo.tags ?? []).map((tag, indx) => (
+                  <Badge key={indx} text={tag.title ?? ""} />
                 ))}
               </div>
             </div>

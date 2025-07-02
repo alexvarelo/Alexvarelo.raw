@@ -9,6 +9,7 @@ import { UserPhotoProvider } from "@/contexts/UserPhotoContext";
 import { APP_CONFIG } from "@/constants/app";
 import { Analytics } from "@vercel/analytics/react";
 import QueryProvider from "@/contexts/ReactQueryContext";
+import LayoutVisibility from "@/components/LayoutVisibility";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -30,12 +31,17 @@ export default function RootLayout({
             <ThemeProvider>
               <ClientThemeWrapper>
                 <ImageNavigationProvider>
-                  <NavbarHeader />
-                  <div className="flex flex-col min-h-screen">
-                    <div className="flex-grow container mx-auto p-4">
-                      {children}
+                  <LayoutVisibility hideOn={["/collections/"]}>
+                    <NavbarHeader />
+                    <div className="flex flex-col min-h-screen">
+                      <div className="flex-grow container mx-auto p-4">
+                        {children}
+                      </div>
                     </div>
-                  </div>
+                  </LayoutVisibility>
+                  <LayoutVisibility showOnlyOn={["/collections/"]}>
+                    {children}
+                  </LayoutVisibility>
                   <Footer />
                 </ImageNavigationProvider>
               </ClientThemeWrapper>
