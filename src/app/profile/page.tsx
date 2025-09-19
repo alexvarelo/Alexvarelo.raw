@@ -22,7 +22,7 @@ const Profile = () => {
 
   return (
     <>
-      <h2 className="text-5xl font-extrabold my-6 ml-2">
+      <h2 className="md:text-5xl text-4xl font-extrabold my-6 ml-2">
         <GradientText>.RAW </GradientText>
         STATISTICS
       </h2>
@@ -34,23 +34,28 @@ const Profile = () => {
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
               viewBox="0 0 24 24"
-              className="inline-block h-8 w-8 stroke-current"
+              stroke="currentColor"
+              className="w-7 h-7 text-gray-700"
             >
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                strokeWidth="2"
-                d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"
-              ></path>
+                strokeWidth="1.5"
+                d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z"
+              />
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth="1.5"
+                d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"
+              />
             </svg>
           </div>
           <div className="stat-title">Total Views</div>
-          <div className="stat-value text-primary">
-            <div className="stat-value text-red-400">
-              <LoadingIndicator isLoading={Checks.isNil(stats)}>
-                <NumberTicker value={totalViews} />
-              </LoadingIndicator>
-            </div>
+          <div className="stat-value bg-gradient-to-r from-blue-300 to-blue-500 bg-clip-text text-transparent">
+            <LoadingIndicator isLoading={Checks.isNil(stats)}>
+              <NumberTicker value={totalViews} />
+            </LoadingIndicator>
           </div>
           <div className="stat-desc">
             {stats?.views?.historical?.average?.toLocaleString?.() ?? 0} average per day
@@ -63,18 +68,19 @@ const Profile = () => {
               xmlns="http://www.w3.org/2000/svg"
               fill="none"
               viewBox="0 0 24 24"
-              className="inline-block h-8 w-8 stroke-current"
+              stroke="currentColor"
+              className="w-7 h-7 text-gray-700"
             >
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                strokeWidth="2"
-                d="M13 10V3L4 14h7v7l9-11h-7z"
-              ></path>
+                strokeWidth="1.5"
+                d="M3 16.5v2.25A2.25 2.25 0 0 0 5.25 21h13.5A2.25 2.25 0 0 0 21 18.75V16.5M16.5 12 12 16.5m0 0L7.5 12m4.5 4.5V3"
+              />
             </svg>
           </div>
           <div className="stat-title">Total downloads</div>
-          <div className="stat-value text-blue-600">
+          <div className="stat-value bg-gradient-to-r from-blue-400 to-blue-600 bg-clip-text text-transparent">
             <LoadingIndicator isLoading={Checks.isNil(stats)}>
               <NumberTicker value={totalDownloads} />
             </LoadingIndicator>
@@ -94,7 +100,7 @@ const Profile = () => {
           </div>
           {/*TODO: This is wrong, needs to be updated*/}
           <div className="stat-title">Photos uploaded</div>
-          <div className="stat-value text-green-400">{user?.total_photos}</div>
+          <div className="stat-value bg-gradient-to-r from-blue-500 to-blue-700 bg-clip-text text-transparent">{user?.total_photos}</div>
           <div className="stat-desc">alexvarelo.raw</div>
         </div>
       </div>

@@ -42,7 +42,7 @@ const ImageGallery = ({ photos, showPhotoStats = false, breakPoints }: ImageGall
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true, amount: 0.2 }}
-            transition={{ duration: 0.5, delay: idx * 0.07, ease: "easeOut" }}
+            /* transition={{ duration: 0.3, delay: idx * 0.009, ease: "easeOut"}} */
           >
             <ImageGridItem image={image} showPhotoStats={showPhotoStats} />
           </motion.div>

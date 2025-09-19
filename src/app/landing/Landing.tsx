@@ -1,5 +1,4 @@
 import { useState, useEffect, FC, useRef, useMemo } from "react";
-import StatsContainer from "@/components/StatsContainer";
 import LoadingIndicator from "@/components/loading/LoadingIndicator";
 import { motion } from "framer-motion";
 import ImageGallery from "@/components/images/ImageGallery";
@@ -9,7 +8,10 @@ import GradientText from "@/components/text/GradientText";
 import { CompaniesAnimatedCarousel } from "@/components/shared/CompaniesAnimatedCarousel";
 import { APP_CONFIG } from "@/constants/app";
 import { Pager } from "@/models/Pagination";
-import { useGetUserPhotos, useGetUserProfile } from "@/apis/generated/unsplashApi";
+import {
+  useGetUserPhotos,
+  useGetUserProfile,
+} from "@/apis/generated/unsplashApi";
 
 const Landing: FC = () => {
   const [pager, setPager] = useState<Pager>({
@@ -25,11 +27,6 @@ const Landing: FC = () => {
       page: pager.page,
       per_page: pager.resultsPerPage,
       order_by: "popular",
-    },
-    {
-      query: {
-        keepPreviousData: true,
-      },
     }
   );
 
@@ -72,8 +69,6 @@ const Landing: FC = () => {
       setUser(userProfile as User);
     }
   }, [userProfile, setUser]);
-
-  console.log("user profile", userProfile);
 
   return (
     <div>
@@ -132,7 +127,7 @@ const Landing: FC = () => {
           Showing {photos.length} photos from {userProfile?.total_photos}
         </p>
       </div>
-      {isLoading ? (
+      {isLoading && pager.page === 1 ? (
         <div className="flex justify-center items-center h-full">
           <LoadingIndicator isLoading={true} loadingSize="lg" />
         </div>
