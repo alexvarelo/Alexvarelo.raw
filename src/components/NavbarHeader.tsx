@@ -35,6 +35,9 @@ const NavbarHeader = () => {
             <li>
               <Link href={"/profile"}>Statistics</Link>
             </li>
+            <li>
+              <Link href={"/circular-gallery"}>Gallery</Link>
+            </li>
             {/* <li>
               <Link href={"/atomic"}>Atomic</Link>
             </li> */}
@@ -64,7 +67,7 @@ const NavbarHeader = () => {
             <Link href={"/profile"}>Statistics</Link>
           </li>
           <li>
-            <Link href={"/circular-gallery"}>Circular Gallery</Link>
+            <Link href={"/circular-gallery"}>Gallery</Link>
           </li>
           {/* <li>
             <Link href={"/atomic"}>Atomic</Link>
