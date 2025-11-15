@@ -319,7 +319,7 @@ const TextAnimateBase = ({
       segments = children.split(/(\s+)/);
       break;
     case "character":
-      segments = children.split("");
+      segments = Array.from(children);
       break;
     case "line":
       segments = children.split("\n");
