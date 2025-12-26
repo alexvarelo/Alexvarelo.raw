@@ -5,6 +5,7 @@ const nextConfig = {
 	images: {
 		domains: ["images.unsplash.com"],
 	},
+	transpilePackages: ["react-query"],
 };
 
 module.exports = nextConfig;
