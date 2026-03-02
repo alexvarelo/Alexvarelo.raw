@@ -12,9 +12,18 @@ import { NumberTicker } from "@/components/shared/NumberTicker";
 import { Badge } from "@/components/shared/Badge";
 import { Blurhash } from "react-blurhash";
 import { cn } from "@/lib/utils";
-import { FaApple, FaCamera, FaClock, FaRuler, FaSun } from "react-icons/fa";
-import { RiNumbersLine } from "react-icons/ri";
-import { BsDownload, BsEye, BsTag } from "react-icons/bs";
+import {
+  FaApple,
+  FaCamera,
+  FaClock,
+  FaInfoCircle,
+  FaRuler,
+  FaSun,
+} from "react-icons/fa";
+import { HiOutlineArrowLeft, HiOutlineLocationMarker } from "react-icons/hi";
+import { BsDownload, BsEye } from "react-icons/bs";
+import { IoStatsChartOutline } from "react-icons/io5";
+import { MdOutlineDateRange } from "react-icons/md";
 import {
   useGetPhotoDetails,
   usePhotoStatistics,
@@ -48,29 +57,66 @@ const ImageDetail: React.FC<PageProps> = ({ params }) => {
   const imageIsVertical = (photo.height ?? 0) > (photo.width ?? 0);
 
   return (
-    <div className="p-4 md:p-6 relative">
+    <div className="min-h-screen bg-base-100">
       <motion.div
-        initial={{ opacity: 0, y: 50 }}
+        initial={{ opacity: 0, y: 10 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 2 }}
+        transition={{ duration: 1 }}
+        className="w-full relative"
       >
-        <div
-          className={cn(
-            "flex flex-col h-[calc(100vh-64px)]",
-            imageIsVertical && "lg:flex-row"
-          )}
-        >
-          <div className="flex-1 flex items-center justify-center relative">
-            {photo.blur_hash && !isLoaded && (
-              <div className="absolute inset-0">
-                <Blurhash hash={photo.blur_hash} width="100%" height="100%" />
-              </div>
-            )}
-            <div className="relative w-full h-full">
+        {/* Unified Minimal Floating Controls */}
+        <div className="fixed bottom-10 left-1/2 -translate-x-1/2 z-50 flex items-center gap-1.5 p-2 bg-base-100/80 backdrop-blur-xl rounded-full shadow-2xl border border-base-content/10 pointer-events-auto transition-all animate-in fade-in slide-in-from-bottom-4 duration-500">
+          <button
+            onClick={() => router.back()}
+            className="p-2.5 rounded-full hover:bg-base-content/5 text-base-content/60 hover:text-base-content transition-all"
+            title="Go Back"
+          >
+            <HiOutlineArrowLeft size={18} />
+          </button>
+
+          <div className="w-px h-6 bg-base-content/10 mx-1" />
+
+          <ImageNavigationButtons
+            onPrevClick={() => handleNavigation("prev")}
+            onNextClick={() => handleNavigation("next")}
+            prevDisabled={!prevImageId}
+            nextDisabled={!nextImageId}
+          />
+
+          <div className="w-px h-6 bg-base-content/10 mx-1" />
+
+          <button
+            onClick={() => {
+              const link = document.createElement('a');
+              link.href = photo.urls?.raw ?? "";
+              link.download = `${photo.id}.jpg`;
+              link.click();
+            }}
+            className="flex items-center gap-2 p-2.5 px-4 rounded-full bg-base-content text-base-100 hover:opacity-90 transition-all font-bold text-xs uppercase tracking-widest"
+          >
+            <BsDownload size={16} />
+            <span className="hidden sm:inline">Download</span>
+          </button>
+        </div>
+
+        {/* Layout Grid: Sticky Image | Scrollable Info */}
+        <div className="lg:grid lg:grid-cols-[1fr,340px] h-[calc(100vh-76px)]">
+
+          {/* Left Side: Immersive Image (Sticky) */}
+          <div className="lg:sticky lg:top-0 h-[60vh] lg:h-[calc(100vh-76px)] flex items-center justify-center p-4 md:p-8 lg:p-12 bg-base-100 overflow-hidden">
+            <div className="relative w-full h-full flex items-center justify-center">
+              {photo.blur_hash && !isLoaded && (
+                <div className="absolute inset-0">
+                  <Blurhash hash={photo.blur_hash} width="100%" height="100%" />
+                </div>
+              )}
               <Image
-                src={photo.urls?.raw ?? ""}
+                src={photo.urls?.regular ?? ""}
                 alt={photo.alt_description ?? ""}
-                className="object-cover"
+                className={cn(
+                  "object-contain w-full h-full transition-all duration-1500 ease-out",
+                  isLoaded ? "opacity-100 scale-100" : "opacity-0 scale-98"
+                )}
                 priority
                 fill
                 onLoad={() => setIsLoaded(true)}
@@ -78,121 +124,108 @@ const ImageDetail: React.FC<PageProps> = ({ params }) => {
             </div>
           </div>
 
-          {/* Sidebar Section */}
-          <div className="flex-1 space-y-6 text-sm lg:pl-10 pt-10">
-            <div className="flex flex-col space-y-4 md:flex-row md:space-y-0 md:items-start md:justify-between">
-              <div className="space-y-2">
-                <h2 className="text-3xl font-bold mb-2 md:text-4xl">
-                  {photo.description}
-                </h2>
-              </div>
+          {/* Right Side: Sophisticated Sidebar */}
+          <div className="bg-base-100 p-5 md:p-6 lg:p-8 flex flex-col justify-between overflow-y-auto lg:h-[calc(100vh-76px)]">
+            <div className="space-y-6">
 
-              <div className="flex flex-row items-end gap-2 md:gap-4 scale-75 md:scale-100 origin-left md:origin-right">
-                <ImageNavigationButtons
-                  onPrevClick={() => handleNavigation("prev")}
-                  onNextClick={() => handleNavigation("next")}
-                  prevDisabled={!prevImageId}
-                  nextDisabled={!nextImageId}
-                />
-                <DownloadButton
-                  url={photo.urls?.raw ?? ""}
-                  filename={`${photo.id}.jpg`}
-                />
-              </div>
-            </div>
+              {/* Header Info */}
+              <div className="space-y-3 pt-6 md:pt-8 lg:pt-10">
+                <div className="flex items-center gap-2 text-base-content/60">
+                  <HiOutlineLocationMarker size={12} />
+                  <span className="text-[10px] md:text-[11px] uppercase tracking-[0.2em] font-bold">
+                    {photo.location?.name ?? "Global Perspective"}
+                  </span>
+                </div>
+                <h1 className="text-3xl md:text-3xl lg:text-4xl font-normal tracking-tight text-base-content leading-tight">
+                  {photo.description || photo.alt_description || "Minimal Untitled"}
+                </h1>
 
-            <div className="flex items-center gap-2 text-sm font-extrabold">
-              {photo?.exif?.make?.toLowerCase().includes("apple") ? (
-                <FaApple className="text-gray-500" />
-              ) : (
-                <FaCamera />
-              )}
-              <span>
-                {photo.exif?.make ?? ""} {photo.exif?.model ?? ""}
-              </span>
-            </div>
-            <div className="flex flex-row justify-between">
-              <div className="flex-1">
-                <ul className="space-y-1 md:space-y-2 text-sm text-gray-700">
-                  <li className="flex items-center space-x-2 font-bold mb-3">
-                    <FaCamera className="text-gray-500" />
-                    <span>Camera settings</span>
-                  </li>
-                  <li className="flex items-center space-x-2">
-                    <BsTag className="text-gray-500" />
-                    <span>{photo.location?.name ?? ""}</span>
-                  </li>
-                  <li className="flex items-center space-x-2">
-                    <FaCamera className="text-gray-500" />
-                    <span>{photo.exif?.aperture ?? ""}</span>
-                  </li>
-                  <li className="flex items-center space-x-2">
-                    <FaRuler className="text-gray-500" />
-                    <span>{photo.exif?.focal_length ?? ""}</span>
-                  </li>
-                  <li className="flex items-center space-x-2">
-                    <FaClock className="text-gray-500" />
-                    <span>{photo.exif?.exposure_time ?? ""}</span>
-                  </li>
-                  <li className="flex items-center space-x-2">
-                    <FaSun className="text-gray-500" />
-                    <span>{photo.exif?.iso ?? ""}</span>
-                  </li>
-                  <li className="text-xs md:text-sm text-gray-500 mt-2 md:mt-4">
-                    {photo.created_at ? new Date(photo.created_at).toLocaleDateString() : ""}
-                  </li>
-                </ul>
-              </div>
-              <div className="flex-1">
-                {photoStats && (
-                  <div className="text-sm">
-                    <li className="flex items-center space-x-2 mb-3">
-                      <RiNumbersLine className="text-gray-500" />
-                      <span className="font-bold">Statistics</span>
-                    </li>
-                    <li className="flex items-center space-x-2 mb-1">
-                      <BsEye className="text-gray-500" />
-                      <span>
-                        <NumberTicker
-                          value={photoStats.views?.total ?? 0}
-                          cssWrapper={
-                            (photoStats.views?.total ?? 0) > 100000
-                              ? highlightClass
-                              : ""
-                          }
-                        />
-                      </span>
-                    </li>
-                    <li className="flex items-center space-x-2">
-                      <BsDownload className="text-gray-500" />
-                      <span>
-                        <NumberTicker
-                          value={photoStats?.downloads?.total ?? 0}
-                          cssWrapper={
-                            (photoStats.downloads?.total ?? 0) > 10000
-                              ? highlightClass
-                              : ""
-                          }
-                        />
-                      </span>
-                    </li>
+                <div className="flex items-center gap-3 pt-1">
+                  <div className="w-10 h-10 rounded-full bg-base-300 flex items-center justify-center text-base-content/70 border border-base-content/10">
+                    {photo?.exif?.make?.toLowerCase().includes("apple") ? (
+                      <FaApple size={18} />
+                    ) : (
+                      <FaCamera size={18} />
+                    )}
                   </div>
-                )}
+                  <div className="space-y-0.5">
+                    <p className="text-[9px] md:text-[10px] text-base-content/60 uppercase tracking-widest font-bold">Equipment</p>
+                    <p className="text-sm font-semibold text-base-content leading-none">{photo.exif?.model ?? "Fine Grain Optical"}</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Technical Specifications */}
+              <div className="space-y-3 pt-5">
+                <h3 className="text-[10px] md:text-[11px] uppercase tracking-[0.2em] font-bold text-base-content/60">Technical Data</h3>
+                <div className="grid grid-cols-2 gap-y-4">
+                  {[
+                    { label: "Aperture", value: photo.exif?.aperture ? `ƒ/${photo.exif.aperture}` : "—" },
+                    { label: "Shutter", value: photo.exif?.exposure_time ? `${photo.exif.exposure_time}s` : "—" },
+                    { label: "Focal", value: photo.exif?.focal_length ? `${photo.exif.focal_length}mm` : "—" },
+                    { label: "ISO", value: photo.exif?.iso ?? "—" },
+                  ].map((spec, i) => (
+                    <div key={i} className="space-y-0.5">
+                      <p className="text-[9px] md:text-[10px] uppercase tracking-widest font-bold text-base-content/60">{spec.label}</p>
+                      <p className="text-base md:text-lg font-medium text-base-content tabular-nums tracking-tighter">{spec.value}</p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Performance Stats - Single Row */}
+              <div className="space-y-3 pt-5">
+                <h3 className="text-[10px] md:text-[11px] uppercase tracking-[0.2em] font-bold text-base-content/60">Engagement</h3>
+                <div className="grid grid-cols-2 gap-6">
+                  <div className="space-y-0.5 pb-1.5">
+                    <div className="flex justify-between items-center">
+                      <p className="text-[9px] md:text-[10px] uppercase tracking-widest font-bold text-base-content/60">Views</p>
+                      <BsEye size={12} className="text-base-content/40" />
+                    </div>
+                    <NumberTicker
+                      value={photoStats?.views?.total ?? 0}
+                      cssWrapper="text-lg md:text-xl font-bold text-base-content tracking-tighter"
+                    />
+                  </div>
+                  <div className="space-y-0.5 pb-1.5">
+                    <div className="flex justify-between items-center">
+                      <p className="text-[9px] md:text-[10px] uppercase tracking-widest font-bold text-base-content/60">Gets</p>
+                      <BsDownload size={12} className="text-base-content/40" />
+                    </div>
+                    <NumberTicker
+                      value={photoStats?.downloads?.total ?? 0}
+                      cssWrapper="text-lg md:text-xl font-bold text-base-content tracking-tighter"
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Tags Section */}
+              <div className="space-y-4 pt-6 pb-6">
+                <h3 className="text-[11px] md:text-xs uppercase tracking-[0.2em] font-bold text-base-content/60">Keywords</h3>
+                <div className="flex flex-wrap gap-x-3 gap-y-2">
+                  {(photo.tags ?? []).map((tag, indx) => (
+                    <span key={indx} className="text-[10px] md:text-[11px] uppercase tracking-[0.1em] font-bold text-base-content/60 hover:text-base-content cursor-default transition-colors">
+                      {tag.title}
+                    </span>
+                  ))}
+                </div>
               </div>
             </div>
-            <div>
-              <h3 className="mb-4 flex items-center gap-2">
-                <BsTag className="h-4 w-4" />
-                Tags
-              </h3>
-              <div className="flex flex-wrap gap-2">
-                {(photo.tags ?? []).map((tag, indx) => (
-                  <Badge key={indx} text={tag.title ?? ""} />
-                ))}
+
+            {/* Footer-like Info */}
+            <div className="pt-8 pb-6 mt-4">
+              <div className="flex justify-between items-center text-[10px] md:text-[11px] uppercase tracking-widest font-bold text-base-content/60">
+                <span>Archived</span>
+                <span className="text-base-content/80 italic font-semibold">
+                  {photo.created_at ? new Date(photo.created_at).toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' }) : "-"}
+                </span>
               </div>
             </div>
           </div>
         </div>
+
+
       </motion.div>
     </div>
   );

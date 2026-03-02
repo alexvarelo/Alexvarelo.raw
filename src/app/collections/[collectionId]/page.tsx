@@ -37,29 +37,22 @@ const Page: React.FC<any> = ({ params }) => {
   });
 
   useEffect(() => {
-    if (!newCollectionPhotos) return;
-
-    if (pager.page === 1) {
-      setPhotos(newCollectionPhotos);
-    } else if (newCollectionPhotos.length > 0) {
-      setPhotos((prev) => {
-        // Prevent duplicate appends (common in Strict Mode or sensitive observers)
-        const lastExistingPhoto = prev[prev.length - 1];
-        const lastNewPhoto =
-          newCollectionPhotos[newCollectionPhotos.length - 1];
-
-        if (lastExistingPhoto?.id === lastNewPhoto?.id) {
-          return prev;
-        }
-
-        return [...prev, ...newCollectionPhotos];
-      });
+    if (newCollectionPhotos && newCollectionPhotos.length > 0) {
+      if (pager.page === 1) {
+        setPhotos(newCollectionPhotos);
+      } else {
+        setPhotos((prev) => {
+          // Avoid appending duplicates if React Strict mode runs the effect twice
+          const newPhotosFiltered = newCollectionPhotos.filter(
+            (newPhoto) => !prev.some((p) => p.id === newPhoto.id)
+          );
+          return [...prev, ...newPhotosFiltered];
+        });
+      }
     }
   }, [newCollectionPhotos, pager.page]);
 
-  const hasNextPage =
-    pager.page * pager.resultsPerPage <
-    (collectionInfo?.total_photos as number);
+  const hasNextPage = (collectionInfo?.total_photos || 0) > photos.length;
 
   useEffect(() => {
     const node = observerRef.current;
@@ -71,14 +64,12 @@ const Page: React.FC<any> = ({ params }) => {
           setPager((prev) => ({ ...prev, page: prev.page + 1 }));
         }
       },
-      { threshold: 0.1, rootMargin: "200px" } // Load more before reaching the absolute bottom
+      { threshold: 0.1, rootMargin: "400px" }
     );
 
     observer.observe(node);
-    return () => {
-      observer.disconnect();
-    };
-  }, [hasNextPage, isLoading, isFetching, pager]); // Added pager and isFetching to deps
+    return () => observer.disconnect();
+  }, [hasNextPage, isLoading, isFetching]);
 
   // Safely handle possibly undefined collectionPhotos
   const heroPhoto = photos && photos.length > 0 ? photos[0] : undefined;
@@ -89,7 +80,7 @@ const Page: React.FC<any> = ({ params }) => {
 
   if (!collectionInfo || !heroPhoto) {
     return (
-      <div className="bg-white min-h-screen">
+      <div className="bg-base-100 min-h-screen">
         <CollectionPageSkeleton />
       </div>
     );
@@ -98,7 +89,7 @@ const Page: React.FC<any> = ({ params }) => {
   const tags = Array.isArray(collectionInfo?.tags) ? collectionInfo.tags : [];
 
   return (
-    <div className="bg-white">
+    <div className="bg-base-100">
       {/* Hero Section */}
       <div className="relative w-full h-[75vh] overflow-hidden">
         {/* Loading spinner or skeleton while image loads */}
@@ -159,15 +150,15 @@ const Page: React.FC<any> = ({ params }) => {
 
 
         {/* Content (text remains sharp) */}
-        <div className="absolute bottom-0 left-0 w-full flex items-end min-h-[30vh] pointer-events-none z-30">
-          <div className="relative w-full min-h-[30vh]">
-            <div className="relative z-10 p-4 md:p-6 w-full">
-              <div className="pl-2 md:pl-6">
+        <div className="absolute bottom-0 left-0 w-full flex items-end z-30 pointer-events-none">
+          <div className="relative w-full">
+            <div className="relative z-10 p-6 md:p-8 pb-4 md:pb-6 w-full">
+              <div className="pl-2 md:pl-4">
                 <Link
                   href="/collections"
-                  className="pointer-events-auto px-2 md:px-4 py-0.5 md:py-1 rounded-full bg-white/20 text-white text-xs md:text-base font-medium shadow hover:bg-white/30 transition flex items-center gap-1 md:gap-2 mb-4 w-fit backdrop-blur-md"
+                  className="pointer-events-auto px-3 py-1 rounded-full bg-white/20 text-white text-xs md:text-sm font-medium shadow hover:bg-white/30 transition flex items-center gap-2 mb-6 w-fit backdrop-blur-md border border-white/10"
                 >
-                  <span className="text-sm md:text-xl">←</span> Back
+                  <span className="text-sm md:text-lg">←</span> Back
                 </Link>
                 <div className="flex items-center gap-4 mb-4 mt-2">
                   <span className="text-base md:text-3xl text-white drop-shadow">
@@ -219,12 +210,12 @@ const Page: React.FC<any> = ({ params }) => {
               Showing {photos.length} photos from {collectionInfo?.total_photos}
             </p>
           </div>
-          <div className="flex items-center gap-2 bg-gray-100 p-1 rounded-lg">
+          <div className="flex items-center gap-2 bg-base-200 p-1 rounded-lg">
             <button
               onClick={() => setIsCompact(false)}
               className={`p-1.5 rounded-md transition-all ${!isCompact
-                ? "bg-white shadow-sm text-black"
-                : "text-gray-400 hover:text-gray-600"
+                ? "bg-base-100 shadow-sm text-base-content"
+                : "text-base-content/40 hover:text-base-content"
                 }`}
               title="Standard View"
             >
@@ -233,8 +224,8 @@ const Page: React.FC<any> = ({ params }) => {
             <button
               onClick={() => setIsCompact(true)}
               className={`p-1.5 rounded-md transition-all ${isCompact
-                ? "bg-white shadow-sm text-black"
-                : "text-gray-400 hover:text-gray-600"
+                ? "bg-base-100 shadow-sm text-base-content"
+                : "text-base-content/40 hover:text-base-content"
                 }`}
               title="Compact View"
             >

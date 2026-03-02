@@ -35,7 +35,7 @@ export const DownloadButton: React.FC<DownloadButtonProps> = ({
     <button
       onClick={handleDownload}
       className={cn(
-        "px-4 py-2 bg-black/50 text-white rounded-full hover:bg-black/70 transition-all flex items-center gap-2",
+        "px-4 py-2 bg-black text-white rounded-full hover:bg-gray-800 transition-all flex items-center gap-2",
         className
       )}
     >
@@ -43,4 +43,4 @@ export const DownloadButton: React.FC<DownloadButtonProps> = ({
       <span>Download</span>
     </button>
   );
-}; 
+};

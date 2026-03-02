@@ -42,23 +42,6 @@ const Collections = () => {
     },
   };
 
-  const letterVariants = {
-    hidden: {
-      opacity: 0,
-      filter: "blur(10px)",
-      x: -20,
-    },
-    visible: {
-      opacity: 1,
-      filter: "blur(0px)",
-      x: 0,
-      transition: {
-        duration: 0.3,
-        ease: "easeOut",
-      },
-    },
-  };
-
   // Animation variants for the collections
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -128,7 +111,7 @@ const Collections = () => {
             variants={containerVariants}
             initial="hidden"
             animate={isLoaded ? "visible" : "hidden"}
-            className="space-y-6 md:space-y-8"
+            className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8"
           >
             {collections.map((collection, index) => (
               <motion.div
@@ -142,28 +125,26 @@ const Collections = () => {
                 <div
                   className={`relative overflow-hidden rounded-lg transition-all duration-700 ease-out`}
                 >
-                  <div className="aspect-[2/1] relative">
+                  <div className="aspect-[4/3] md:aspect-[16/9] relative">
                     {collection.cover_photo?.urls?.raw && (
                       <Image
                         src={collection.cover_photo.urls.raw as string}
                         alt={(collection.title as string) || ""}
                         fill
-                        className={`w-full h-full object-cover transition-all duration-500 ease-out cursor-pointer ${
-                          hoveredItem === collection.id
-                            ? "scale-110"
-                            : "scale-100"
-                        }`}
+                        className={`w-full h-full object-cover transition-all duration-500 ease-out cursor-pointer ${hoveredItem === collection.id
+                          ? "scale-110"
+                          : "scale-100"
+                          }`}
                         sizes="(max-width: 768px) 100vw, 1200px"
                       />
                     )}
 
                     {/* Camera Focus Effect */}
                     <div
-                      className={`absolute inset-0 pointer-events-none transition-all duration-500 ease-out ${
-                        hoveredItem === collection.id
-                          ? "opacity-100"
-                          : "opacity-0"
-                      }`}
+                      className={`absolute inset-0 pointer-events-none transition-all duration-500 ease-out ${hoveredItem === collection.id
+                        ? "opacity-100"
+                        : "opacity-0"
+                        }`}
                     >
                       {/* Four L-shaped corners */}
                       {/* <div className="absolute top-4 left-4 w-6 h-6">
@@ -221,21 +202,19 @@ const Collections = () => {
 
                     {/* Overlay */}
                     <div
-                      className={`absolute inset-0 bg-black/50 transition-all duration-500 ease-out ${
-                        hoveredItem === collection.id
-                          ? "opacity-100"
-                          : "opacity-0"
-                      }`}
+                      className={`absolute inset-0 bg-black/50 transition-all duration-500 ease-out ${hoveredItem === collection.id
+                        ? "opacity-100"
+                        : "opacity-0"
+                        }`}
                     />
 
                     {/* Category Badge */}
                     <div className="absolute top-4 md:top-6 right-4 md:right-6">
                       <span
-                        className={`inline-flex items-center px-3 md:px-4 py-1.5 md:py-2 rounded-full text-sm md:text-md font-medium bg-white/20 text-white backdrop-blur-sm transition-all duration-300 ${
-                          hoveredItem === collection.id
-                            ? "translate-y-0 opacity-100"
-                            : "translate-y-1 opacity-0"
-                        }`}
+                        className={`inline-flex items-center px-3 md:px-4 py-1.5 md:py-2 rounded-full text-sm md:text-md font-medium bg-white/20 text-white backdrop-blur-sm transition-all duration-300 ${hoveredItem === collection.id
+                          ? "translate-y-0 opacity-100"
+                          : "translate-y-1 opacity-0"
+                          }`}
                       >
                         {collection.total_photos} Photos
                       </span>

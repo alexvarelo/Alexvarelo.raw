@@ -35,10 +35,18 @@ const Landing: FC = () => {
   const [photos, setPhotos] = useState<any[]>([]);
 
   useEffect(() => {
-    if (pager.page === 1) {
-      setPhotos(newPhotos);
-    } else if (newPhotos.length > 0) {
-      setPhotos((prev) => [...prev, ...newPhotos]);
+    if (newPhotos && newPhotos.length > 0) {
+      if (pager.page === 1) {
+        setPhotos(newPhotos);
+      } else {
+        setPhotos((prev) => {
+          // Avoid appending duplicates
+          const newPhotosFiltered = newPhotos.filter(
+            (newPhoto) => !prev.some((p) => p.id === newPhoto.id)
+          );
+          return [...prev, ...newPhotosFiltered];
+        });
+      }
     }
   }, [newPhotos, pager.page]);
 
@@ -55,14 +63,14 @@ const Landing: FC = () => {
           setPager((prev) => ({ ...prev, page: prev.page + 1 }));
         }
       },
-      { threshold: 0.5 }
+      { threshold: 0.1, rootMargin: "400px" }
     );
 
     observer.observe(node);
     return () => {
       observer.disconnect();
     };
-  }, [hasNextPage, isLoading, pager]);
+  }, [hasNextPage, isLoading]);
 
   useEffect(() => {
     if (userProfile) {
@@ -97,9 +105,9 @@ const Landing: FC = () => {
         images={
           photos
             ? photos
-                .slice(0, 4)
-                .map((x) => x?.urls?.regular)
-                .filter((url): url is string => typeof url === "string")
+              .slice(0, 4)
+              .map((x) => x?.urls?.regular)
+              .filter((url): url is string => typeof url === "string")
             : []
         }
       />
