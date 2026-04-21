@@ -1,4 +1,5 @@
 "use client";
+import Image from "next/image";
 import { useGetUserStatistics } from "@/apis/generated/unsplashApi";
 import { APP_CONFIG } from "@/constants/app";
 import { AvailableApis } from "@/apis/apis";
@@ -93,8 +94,13 @@ const Profile = () => {
         <div className="stat flex-1 min-w-[250px] m-2">
           <div className="stat-figure text-secondary">
             <div className="avatar">
-              <div className="w-16 rounded-full">
-                <img src={"/ProfileAvatar.png"} className="w-full h-auto" />
+              <div className="w-16 rounded-full overflow-hidden relative aspect-square">
+                <Image 
+                  src={APP_CONFIG.avatar} 
+                  alt="Profile Avatar" 
+                  fill
+                  className="object-cover"
+                />
               </div>
             </div>
           </div>

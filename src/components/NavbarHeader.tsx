@@ -2,6 +2,8 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import Image from "next/image";
+import { APP_CONFIG } from "@/constants/app";
 import ThemeIndicator from "./ThemeIndicator";
 
 const NavbarHeader = () => {
@@ -49,11 +51,12 @@ const NavbarHeader = () => {
           className="btn btn-ghost text-xl flex items-center justify-center p-0"
           href="/"
         >
-          <div className="ring-primary w-10 h-10 rounded-full overflow-hidden flex items-center justify-center">
-            <img
-              src={"/ProfileAvatar.png"}
+          <div className="ring-primary w-10 h-10 rounded-full overflow-hidden relative aspect-square">
+            <Image
+              src="/ProfileAvatar.png"
               alt="Profile"
-              className="rounded-full w-full h-full object-cover"
+              fill
+              className="object-contain"
             />
           </div>
         </Link>

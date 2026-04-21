@@ -1,4 +1,5 @@
 import { useState, useEffect, FC, useRef, useMemo } from "react";
+import Image from "next/image";
 import LoadingIndicator from "@/components/loading/LoadingIndicator";
 import { motion } from "framer-motion";
 import ImageGallery from "@/components/images/ImageGallery";
@@ -80,27 +81,40 @@ const Landing: FC = () => {
   }, [userProfile, setUser]);
 
   return (
-    <div>
-      <div className="avatar">
-        <div className="ring-primary ring-offset-base-100 w-16 md:w-24 rounded-full">
-          <img src={userProfile?.profile_image?.large} />
-        </div>
-      </div>
-      <motion.h1
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 1 }}
-        className="w-full md:text-9xl text-4xl leading-none font-black uppercase tracking-tighter mt-8"
-      >
-        <a
-          href="https://www.instagram.com/alexvarelo.raw"
-          target="_blank"
-          rel="noopener noreferrer"
+    <>
+      <div className="flex flex-col md:flex-row justify-between items-center gap-6 mb-8">
+        <motion.div 
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 1, ease: "easeOut" }}
+          className="avatar order-1 md:order-2"
         >
-          <GradientText>{APP_CONFIG.title}</GradientText>
-        </a>
-        <br className="mb-10" /> PHOTOS
-      </motion.h1>
+          <div className="ring-primary ring-offset-base-100 w-32 md:w-48 rounded-full shadow-2xl overflow-hidden relative aspect-square">
+            <Image 
+              src={APP_CONFIG.avatar} 
+              alt={userProfile?.name || "Avatar"} 
+              fill
+              className="object-cover"
+              priority
+            />
+          </div>
+        </motion.div>
+        <motion.h1
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 1 }}
+          className="md:text-9xl text-4xl leading-none font-black uppercase tracking-tighter order-2 md:order-1 text-center md:text-left"
+        >
+          <a
+            href="https://www.instagram.com/alexvarelo.raw"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            <GradientText>{APP_CONFIG.title}</GradientText>
+          </a>
+          <br className="md:hidden" /> PHOTOS
+        </motion.h1>
+      </div>
 
       <AboutMeGrid
         images={
@@ -151,7 +165,7 @@ const Landing: FC = () => {
           {hasNextPage && <div ref={observerRef} className="h-10 w-full" />}
         </motion.div>
       )}
-    </div>
+    </>
   );
 };
 
