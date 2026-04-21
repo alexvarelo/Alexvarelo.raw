@@ -97,4 +97,10 @@ interface AlternativeSlugs {
     asset_type: string;
     user: User;
     pinned: any | null;
+    statistics?: {
+      views: { total: number };
+      downloads: { total: number };
+    };
+    views?: number;
+    downloads?: number;
   }

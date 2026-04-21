@@ -1,6 +1,7 @@
+import { FunctionComponent, useEffect, useState } from "react";
 import { AvailableApis } from "@/apis/apis";
 import { useUserPhoto } from "@/contexts/UserPhotoContext";
-import { FunctionComponent, useEffect, useState } from "react";
+import PhotoStatsOverlay from "@/components/images/PhotoStatsOverlay";
 
 interface PopularPhotosProps {}
 
@@ -9,19 +10,25 @@ const PopularPhotos: FunctionComponent<PopularPhotosProps> = () => {
   const [photos, setPhotos] = useState<Photo[]>([]);
 
   useEffect(() => {
-    AvailableApis.fetchUserPhotos(1, 10, "popular", "portrait").then((result) => {
+    AvailableApis.fetchUserPhotos(1, 10, "popular", "portrait", true).then((result) => {
       setPhotos(result);
-      setUser(result[0].user);
+      if (result.length > 0) {
+        setUser(result[0].user);
+      }
     });
   }, [setUser]);
   return (
     <div className="carousel rounded-box mt-5">
       {photos?.map((photo) => (
-        <div className="carousel-item" key={photo?.id}>
+        <div className="carousel-item relative group" key={photo?.id}>
           <img
             src={photo?.urls.regular}
             alt={photo?.description}
-            className=" w-[300px] h-[500px] sm:w-[500px] sm:h-[600px] object-cover rounded"
+            className="w-[300px] h-[500px] sm:w-[500px] sm:h-[600px] object-cover rounded"
+          />
+          <PhotoStatsOverlay
+            image={photo}
+            show={true}
           />
         </div>
       ))}

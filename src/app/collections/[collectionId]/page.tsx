@@ -34,7 +34,8 @@ const Page: React.FC<any> = ({ params }) => {
   } = useGetCollectionPhotos(params?.collectionId, {
     page: pager.page,
     per_page: pager.resultsPerPage,
-  });
+    stats: true,
+  } as any);
 
   useEffect(() => {
     if (newCollectionPhotos && newCollectionPhotos.length > 0) {
@@ -236,6 +237,7 @@ const Page: React.FC<any> = ({ params }) => {
 
         <ImageGallery
           photos={galleryPhotos}
+          showPhotoStats={true}
           breakPoints={isCompact ? compactBreakPoints : standardBreakPoints}
         />
       </div>

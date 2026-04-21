@@ -27,6 +27,7 @@ const Landing: FC = () => {
       page: pager.page,
       per_page: pager.resultsPerPage,
       order_by: "popular",
+      stats: true,
     }
   );
 
