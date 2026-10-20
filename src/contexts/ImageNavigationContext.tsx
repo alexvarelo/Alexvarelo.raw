@@ -5,6 +5,7 @@ import { createContext, useContext, ReactNode, useState } from "react";
 type ImageNavigation = {
   nextImage: Record<string, string>; // Map of current image ID to next image ID
   prevImage: Record<string, string>; // Map of current image ID to previous image ID
+  order: string[]; // Image IDs in the order they were shown
 };
 
 type ImageNavigationContextType = {
@@ -20,6 +21,7 @@ export function ImageNavigationProvider({ children }: { children: ReactNode }) {
   const [navigation, setNavigation] = useState<ImageNavigation>({
     nextImage: {},
     prevImage: {},
+    order: [],
   });
 
   const setImageNavigation = (photos: Photo[]) => {
@@ -35,7 +37,11 @@ export function ImageNavigationProvider({ children }: { children: ReactNode }) {
       }
     });
 
-    setNavigation({ nextImage: nextImageMap, prevImage: prevImageMap });
+    setNavigation({
+      nextImage: nextImageMap,
+      prevImage: prevImageMap,
+      order: photos.map((photo) => String(photo.id)),
+    });
   };
 
   return (
@@ -49,7 +55,7 @@ export function useImageNavigation() {
   const context = useContext(ImageNavigationContext);
   if (context === undefined) {
     throw new Error(
-      "useImageNavigation must be used within an ImageNavigationProvider"
+      "useImageNavigation must be used within an ImageNavigationProvider",
     );
   }
   return context;

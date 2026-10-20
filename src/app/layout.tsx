@@ -1,17 +1,29 @@
-import { Inter } from "next/font/google";
+import { Archivo, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
+import "@/styles/avr.css";
 import { ThemeProvider } from "@/contexts/ThemeContext";
 import ClientThemeWrapper from "@/contexts/CliehtThemeWrapper";
-import NavbarHeader from "@/components/NavbarHeader";
-import Footer from "@/components/Footer";
 import { ImageNavigationProvider } from "@/contexts/ImageNavigationContext";
 import { UserPhotoProvider } from "@/contexts/UserPhotoContext";
+import { LanguageProvider } from "@/contexts/LanguageContext";
 import { APP_CONFIG } from "@/constants/app";
 import { Analytics } from "@vercel/analytics/react";
 import QueryProvider from "@/contexts/ReactQueryContext";
 import LayoutVisibility from "@/components/LayoutVisibility";
+import { SiteHeader } from "@/components/ds/SiteHeader";
+import { SiteFooter } from "@/components/ds/SiteFooter";
+import { PageContainer } from "@/components/ds/PageContainer";
 
-const inter = Inter({ subsets: ["latin"] });
+const archivo = Archivo({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700", "800", "900"],
+  variable: "--font-archivo",
+});
+const jetbrains = JetBrains_Mono({
+  subsets: ["latin"],
+  weight: ["400", "500"],
+  variable: "--font-jetbrains",
+});
 
 export default function RootLayout({
   children,
@@ -19,32 +31,32 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" className={`${archivo.variable} ${jetbrains.variable}`}>
       <head>
         <title>{APP_CONFIG.title}</title>
         <meta name="description" content={APP_CONFIG.description} />
         <link rel="icon" href={APP_CONFIG.avatar} />
       </head>
-      <body className={inter.className}>
+      <body>
         <QueryProvider>
           <UserPhotoProvider>
             <ThemeProvider>
-              <ClientThemeWrapper>
-                <ImageNavigationProvider>
-                  <LayoutVisibility hideOn={["/collections/"]}>
-                    <NavbarHeader />
-                    <div className="flex flex-col min-h-screen">
-                      <div className="flex-grow container mx-auto p-4">
+              <LanguageProvider>
+                <ClientThemeWrapper>
+                  <ImageNavigationProvider>
+                    <div className="avr-shell">
+                      <LayoutVisibility hideOn={["/collections/"]}>
+                        <SiteHeader />
+                        <PageContainer>{children}</PageContainer>
+                      </LayoutVisibility>
+                      <LayoutVisibility showOnlyOn={["/collections/"]}>
                         {children}
-                      </div>
+                      </LayoutVisibility>
+                      <SiteFooter />
                     </div>
-                  </LayoutVisibility>
-                  <LayoutVisibility showOnlyOn={["/collections/"]}>
-                    {children}
-                  </LayoutVisibility>
-                  <Footer />
-                </ImageNavigationProvider>
-              </ClientThemeWrapper>
+                  </ImageNavigationProvider>
+                </ClientThemeWrapper>
+              </LanguageProvider>
             </ThemeProvider>
           </UserPhotoProvider>
         </QueryProvider>
