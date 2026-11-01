@@ -2,17 +2,16 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useContext, useEffect, useState } from "react";
-import { ThemeContext } from "@/contexts/ThemeContext";
+import { useEffect, useState } from "react";
 import { useLanguage } from "@/contexts/LanguageContext";
 import { APP_CONFIG } from "@/constants/app";
 import { cn } from "@/lib/utils";
-import { Button, IconButton } from "./core";
+import { Button } from "./core";
+import { ThemeToggle } from "./ThemeToggle";
 
 /** Floating pill header: memoji, links and controls in one capsule that tightens on scroll. */
 export function SiteHeader() {
   const { t, toggleLang } = useLanguage();
-  const { theme, changeTheme } = useContext(ThemeContext);
   const pathname = usePathname() || "/";
   const [scrolled, setScrolled] = useState(false);
 
@@ -22,9 +21,6 @@ export function SiteHeader() {
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
-
-  // /lab (navbar + hero lab) renders its own navbar variants; /lab/gallery keeps the real one
-  if (pathname === "/lab") return null;
 
   const links = [
     { href: "/collections", label: t.nav.journeys },
@@ -59,12 +55,7 @@ export function SiteHeader() {
           <Button variant="secondary" size="sm" onClick={toggleLang}>
             {t.langToggle}
           </Button>
-          <IconButton
-            glyph={theme === "business" ? "☾" : "☀"}
-            label={t.toggleTheme}
-            onClick={changeTheme}
-            size={32}
-          />
+          <ThemeToggle />
         </div>
       </header>
       <div className="avr-header-spacer" />

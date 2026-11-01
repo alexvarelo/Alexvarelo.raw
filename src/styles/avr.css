@@ -596,6 +596,54 @@ html:has([data-theme="business"]) body {
   height: 32px;
   min-width: 32px;
 }
+/* Light/dark switch: both icons stay visible, a thumb slides to the active one */
+.avr-theme-switch {
+  --thumb-travel: 26px;
+  position: relative;
+  flex: none;
+  width: 58px;
+  height: 32px;
+  padding: 0;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--border-default);
+  background: var(--surface-subtle);
+  color: var(--text-primary);
+  cursor: pointer;
+}
+.avr-theme-switch__icon {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  color: var(--text-tertiary);
+}
+.avr-theme-switch__icon--l {
+  left: 9px;
+}
+.avr-theme-switch__icon--r {
+  right: 9px;
+}
+.avr-theme-switch__thumb {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--surface-inverse);
+  color: var(--text-on-inverse);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.avr-theme-switch__glyph {
+  position: absolute;
+  display: flex;
+}
+.avr-theme-switch svg {
+  display: block;
+}
 @media (max-width: 520px) {
   .avr-header {
     gap: 6px;
@@ -609,6 +657,50 @@ html:has([data-theme="business"]) body {
   }
   .avr-header__divider {
     display: none;
+  }
+}
+@media (max-width: 420px) {
+  .avr-header {
+    gap: 2px;
+    padding: 6px 6px 6px 8px;
+  }
+  .avr-header__nav {
+    gap: 0;
+  }
+  .avr-header__nav a {
+    padding: 6px 5px;
+    font-size: 12px;
+  }
+  .avr-header__actions {
+    gap: 4px;
+  }
+  .avr-header__actions .avr-btn--sm {
+    padding: 0 9px;
+    min-width: 30px;
+  }
+  .avr-theme-switch {
+    --thumb-travel: 18px;
+    width: 50px;
+  }
+  .avr-theme-switch__icon--l {
+    left: 7px;
+  }
+  .avr-theme-switch__icon--r {
+    right: 7px;
+  }
+}
+@media (max-width: 340px) {
+  .avr-header__brand {
+    width: 24px;
+    height: 24px;
+  }
+  .avr-header__brand img {
+    width: 24px;
+    height: 24px;
+  }
+  .avr-header__nav a {
+    padding: 6px 4px;
+    font-size: 11.5px;
   }
 }
 
@@ -885,6 +977,16 @@ html:has([data-theme="business"]) body {
   }
   .avr-stat__value {
     font-size: 26px;
+  }
+  .avr-about__stats {
+    gap: 10px;
+  }
+  .avr-stat {
+    min-width: 0;
+  }
+  .avr-stat__label {
+    font-size: 12px;
+    overflow-wrap: anywhere;
   }
   .avr-tile__overlay {
     padding: 14px;
