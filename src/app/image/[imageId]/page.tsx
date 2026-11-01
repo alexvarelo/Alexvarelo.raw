@@ -13,7 +13,7 @@ import {
   useGetUserPhotos,
   usePhotoStatistics,
 } from "@/apis/generated/unsplashApi";
-import { Button, IconButton, BadgeGroup } from "@/components/ds/core";
+import { Button, BadgeGroup } from "@/components/ds/core";
 import { PhotoFrame, SpecList, StatLine } from "@/components/ds/content";
 
 interface PageProps {
@@ -160,6 +160,10 @@ const ImageDetail: React.FC<PageProps> = ({ params }) => {
         .map(capitalize),
     ),
   ).slice(0, MAX_KEYWORDS);
+  // ~2000px wide keeps the enlarged photo sharp without downloading the original
+  const largeSrc = photo.urls?.raw
+    ? `${photo.urls.raw}&w=2000&q=80&fm=jpg&fit=max`
+    : photo.urls?.regular;
   const more = popular.filter((p) => p.id !== photo.id).slice(0, 5);
   const onDownload = () =>
     downloadImage(
@@ -167,18 +171,22 @@ const ImageDetail: React.FC<PageProps> = ({ params }) => {
       `alexvarelo-${photo.id}.jpg`,
     );
 
+  const crumbs = (
+    <>
+      <button type="button" onClick={goBack}>
+        ← {t.back}
+      </button>
+      {position >= 0 && (
+        <span className="avr-mono">
+          {position + 1} {t.of} {order.length}
+        </span>
+      )}
+    </>
+  );
+
   return (
     <div className="avr-detail-page">
-      <div className="avr-crumbs avr-section">
-        <button type="button" onClick={goBack}>
-          ← {t.back}
-        </button>
-        {position >= 0 && (
-          <span className="avr-mono">
-            {position + 1} {t.of} {order.length}
-          </span>
-        )}
-      </div>
+      <div className="avr-crumbs avr-crumbs--top avr-section">{crumbs}</div>
 
       <section className="avr-detail avr-section">
         <div className="avr-detail__stage">
@@ -189,35 +197,13 @@ const ImageDetail: React.FC<PageProps> = ({ params }) => {
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img
               key={photo.id}
-              src={photo.urls?.regular}
+              src={largeSrc}
               alt={photo.alt_description ?? ""}
               width={photo.width}
               height={photo.height}
               onLoad={() => setLoaded(true)}
               style={{ opacity: loaded ? 1 : 0 }}
             />
-            {prevId && (
-              <IconButton
-                glyph="←"
-                label={t.previous}
-                size={48}
-                variant="glass"
-                className="avr-detail__nav"
-                style={{ left: 18 }}
-                onClick={() => router.push(`/image/${prevId}`)}
-              />
-            )}
-            {nextId && (
-              <IconButton
-                glyph="→"
-                label={t.next}
-                size={48}
-                variant="glass"
-                className="avr-detail__nav"
-                style={{ right: 18 }}
-                onClick={() => router.push(`/image/${nextId}`)}
-              />
-            )}
           </div>
         </div>
 
@@ -227,6 +213,7 @@ const ImageDetail: React.FC<PageProps> = ({ params }) => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5, ease: [0.2, 0.8, 0.2, 1] }}
         >
+          <div className="avr-crumbs avr-crumbs--side">{crumbs}</div>
           {photo.location?.name && (
             <span className="avr-detail__kicker">{photo.location.name}</span>
           )}

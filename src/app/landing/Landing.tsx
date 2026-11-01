@@ -1,6 +1,5 @@
 import { useState, useEffect, FC } from "react";
 import Link from "next/link";
-import { motion } from "framer-motion";
 import { useUserPhoto } from "@/contexts/UserPhotoContext";
 import { useImageNavigation } from "@/contexts/ImageNavigationContext";
 import { formatCompact, useLanguage } from "@/contexts/LanguageContext";
@@ -12,7 +11,7 @@ import {
   useGetUserProfile,
   useGetUserStatistics,
 } from "@/apis/generated/unsplashApi";
-import { Wordmark, TextRing } from "@/components/ds/brand";
+import { HeroReveal } from "./HeroReveal";
 import { Button } from "@/components/ds/core";
 import {
   AboutCard,
@@ -25,7 +24,19 @@ import {
 export const POPULAR_PAGE_SIZE = 12;
 
 const DISCIPLINE_TINTS: Tint[] = ["street", "video", "edit", "travel"];
-const FEATURED = ["wordpress", "notion", "trello", "figma"];
+const FEATURED = [
+  "wix",
+  "wordpress",
+  "notion",
+  "trello",
+  "figma",
+  "dropbox",
+  "ghost",
+  "medium",
+  "googleslides",
+  "mailchimp",
+  "squarespace",
+];
 
 type Profile = { total_photos?: number; downloads?: number };
 
@@ -93,38 +104,7 @@ const Landing: FC = () => {
 
   return (
     <>
-      <section className="avr-hero avr-section">
-        <motion.div
-          className="avr-hero__copy"
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6, ease: [0.2, 0.8, 0.2, 1] }}
-        >
-          <a
-            href="https://www.instagram.com/alexvarelo.raw"
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{ textDecoration: "none" }}
-          >
-            <Wordmark className="avr-hero__wordmark" photosLabel={t.photos} />
-          </a>
-          <p className="avr-hero__tag">{t.tag}</p>
-        </motion.div>
-        <motion.div
-          initial={{ opacity: 0, scale: 0.96 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.8 }}
-        >
-          <TextRing className="avr-hero__ring">
-            <PhotoFrame
-              src={APP_CONFIG.avatar}
-              alt={APP_CONFIG.name}
-              tint="neutral"
-              style={{ height: "100%", borderRadius: 0 }}
-            />
-          </TextRing>
-        </motion.div>
-      </section>
+      <HeroReveal />
 
       <section className="avr-bento avr-section">
         <AboutCard title={t.about} className="avr-bento__about" stats={stats}>
@@ -146,13 +126,19 @@ const Landing: FC = () => {
 
       <section className="avr-featured avr-section">
         <span className="avr-overline">{t.featured}</span>
-        <div className="avr-featured__logos">
-          {FEATURED.map((logo) => (
-            <div key={logo} className="avr-featured__slot">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={`/${logo}.svg`} alt={logo} />
-            </div>
-          ))}
+        <div className="avr-featured__marquee">
+          {/* Two copies of the list so the loop is seamless; the second is hidden from screen readers */}
+          <div className="avr-featured__track">
+            {[...FEATURED, ...FEATURED].map((logo, i) => (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                key={i}
+                src={`/${logo}.svg`}
+                alt={i < FEATURED.length ? logo : ""}
+                aria-hidden={i >= FEATURED.length || undefined}
+              />
+            ))}
+          </div>
         </div>
       </section>
 

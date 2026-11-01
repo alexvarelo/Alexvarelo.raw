@@ -98,7 +98,18 @@ const config: Config = {
   },
   plugins: [require("daisyui"), require("tailwindcss-animate")],
   daisyui: {
-    themes: ["bumblebee", "business"],
+    themes: [
+      "bumblebee",
+      {
+        business: {
+          ...require("daisyui/src/theming/themes")["business"],
+          "base-100": "#000000",
+          "base-200": "#0b0b0c",
+          "base-300": "#18191c",
+          "base-content": "#f5f5f5",
+        },
+      },
+    ],
   },
 };
 export default config;

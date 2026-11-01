@@ -4,7 +4,7 @@ import { ReactNode } from "react";
 import { usePathname } from "next/navigation";
 
 /** Pages built on the new design system lay out their own gutters; older pages keep the previous padded container. */
-const REDESIGNED = [/^\/$/, /^\/image\//];
+const REDESIGNED = [/^\/$/, /^\/image\//, /^\/lab/, /^\/gallery/];
 
 export function PageContainer({ children }: { children: ReactNode }) {
   const pathname = usePathname() || "/";

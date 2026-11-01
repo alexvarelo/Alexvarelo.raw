@@ -149,9 +149,6 @@ export function DisciplineTile({
           </div>
           <div className="avr-tile__foot">
             <span className="avr-tile__title">{title}</span>
-            <span className="avr-tile__arrow" aria-hidden="true">
-              ↗
-            </span>
           </div>
         </div>
       </PhotoFrame>
