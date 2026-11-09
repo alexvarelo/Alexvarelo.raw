@@ -1,9 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import Masonry from "react-masonry-css";
-import { CircularGallery, GalleryItem } from "@/components/ui/circular-gallery";
-import ImageGridItem from "@/components/images/ImageGridItem";
+import ImageGallery from "@/components/images/ImageGallery";
 import { useGetUserPhotos } from "@/apis/generated/unsplashApi";
 import { APP_CONFIG } from "@/constants/app";
 
@@ -57,7 +55,7 @@ const getColorKey = (hex: string): ColorKey => {
   return "purple";
 };
 
-const MASONRY_COLS = { default: 5, 1536: 4, 1100: 3, 700: 2, 480: 1 };
+const GRID_COLS = { default: 3, 1100: 2, 700: 2 };
 
 const GalleryPage = () => {
   const [view, setView] = useState<View>("colors");
@@ -99,15 +97,7 @@ const GalleryPage = () => {
     return list.sort((a, b) => hexToHsl(a.color).h - hexToHsl(b.color).h);
   }, [photos, colorFilter]);
 
-  const galleryItems: GalleryItem[] = byColor.map((photo) => ({
-    common: photo.alt_description || "Untitled",
-    binomial: `by ${photo.user?.name || "Unknown"}`,
-    photo: {
-      url: photo.urls?.regular || "",
-      text: photo.alt_description || "",
-      by: photo.user?.name || "Unknown",
-    },
-  }));
+  const shown = view === "colors" ? byColor : recent;
 
   const tabClass = (active: boolean) =>
     `tab ${active ? "tab-active font-semibold" : ""}`;
@@ -162,27 +152,19 @@ const GalleryPage = () => {
         <div className="flex items-center justify-center h-[60vh]">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500" />
         </div>
-      ) : view === "colors" ? (
-        <div className="w-full h-[75vh] relative overflow-hidden">
-          {galleryItems.length > 0 ? (
-            <CircularGallery items={galleryItems} />
+      ) : (
+        <div className="w-full pb-4">
+          {shown.length > 0 ? (
+            <ImageGallery
+              key={`${view}-${colorFilter}`}
+              photos={shown}
+              breakPoints={GRID_COLS}
+            />
           ) : (
-            <p className="text-center text-muted-foreground pt-20">
+            <p className="text-center text-gray-500 pt-20">
               No photos for this color.
             </p>
           )}
-        </div>
-      ) : (
-        <div className="w-full px-1 pb-4">
-          <Masonry
-            breakpointCols={MASONRY_COLS}
-            className="my-masonry-grid"
-            columnClassName="my-masonry-grid_column"
-          >
-            {recent.map((photo) => (
-              <ImageGridItem key={photo.id} image={photo} />
-            ))}
-          </Masonry>
           {!done && (
             <p className="text-center text-sm text-gray-500 py-4">
               Loading more photos…

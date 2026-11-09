@@ -34,14 +34,14 @@ export default function RootLayout({
                   <LayoutVisibility hideOn={["/collections/"]}>
                     <NavbarHeader />
                   </LayoutVisibility>
-                  <LayoutVisibility hideOn={["/collections/", "/circular-gallery"]}>
+                  <LayoutVisibility hideOn={["/collections/", "/gallery"]}>
                     <div className="flex flex-col min-h-screen">
                       <div className="flex-grow container mx-auto p-4">
                         {children}
                       </div>
                     </div>
                   </LayoutVisibility>
-                  <LayoutVisibility showOnlyOn={["/collections/", "/circular-gallery"]}>
+                  <LayoutVisibility showOnlyOn={["/collections/", "/gallery"]}>
                     {children}
                   </LayoutVisibility>
                   <Footer />
